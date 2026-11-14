@@ -1,0 +1,1723 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<!-- للآيباد: عند الإضافة للشاشة الرئيسية يفتح العرض بملء الشاشة -->
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="اسم الآلة">
+<title>اسم الآلة — لغتي</title>
+
+<!--
+╔══════════════════════════════════════════════════════════════════════╗
+║  عرض تفاعلي تعليمي — لغتي — الصف السادس — درس: اسم الآلة             ║
+║                                                                      ║
+║  طريقة الاستخدام:                                                    ║
+║   • افتحي هذا الملف (index.html) في المتصفح مباشرة (Chrome يُفضَّل).   ║
+║   • Space أو → = الشريحة التالية | ← = الشريحة السابقة                ║
+║   • حرف (ت) = تصفيق 👏  | زر ⛶ = ملء الشاشة                          ║
+║   • زر ↺ أعلى كل شريحة يعيدها لحالتها الأولى (لفصل آخر).             ║
+║                                                                      ║
+║  لتعديل المحتوى: انزلي إلى قسم  «⚙️ إعدادات الدرس»  داخل <script>     ║
+║  وعدّلي النصوص بين علامات التنصيص فقط.                               ║
+║   • ضعي الكلمة بين نجمتين  *هكذا*  لتظهر مُظلَّلة بالأصفر.            ║
+║   • الصور الزخرفية (theme4.jpg) تُقرأ من نفس مجلد الملف إن وُجدت.    ║
+╚══════════════════════════════════════════════════════════════════════╝
+-->
+
+<!-- خطوط عربية واضحة (إن لم يتوفر الإنترنت يُستخدم خط النظام تلقائيًا) -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Naskh+Arabic:wght@500;600;700&family=Tajawal:wght@500;700;800;900&display=swap" rel="stylesheet">
+
+<style>
+/* =====================================================================
+   1) الألوان والخطوط (الهوية البصرية: بنفسجي + أصفر فاتح + أبيض)
+   ===================================================================== */
+:root{
+  --p900:#3b2263; --p800:#4f2f86; --p700:#6a45a8; --p600:#7d5bbf; --p500:#9a7fd6;
+  --p300:#cdb8ee; --p200:#e4d7f7; --p100:#f4eefc;
+  --y500:#f2cb45; --y300:#fbe59a; --y200:#fdf0c2; --y100:#fff9e3;
+  --frame:#d8c0eb;
+  --ink:#2d1f4a;
+  --ok:#23945e;  --okbg:#e2f6ea;
+  --bad:#d9506f; --badbg:#fde9ee;
+  --root:#d6336c;                 /* لون حروف الميزان (ف ع ل) */
+  --f-text:'Noto Naskh Arabic','Traditional Arabic','Geeza Pro','Times New Roman',serif;
+  --f-ui:'Tajawal','Segoe UI','Geeza Pro',Tahoma,sans-serif;
+  --shadow:0 12px 30px rgba(79,47,134,.13);
+}
+
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;overflow:hidden;background:var(--frame)}
+body{font-family:var(--f-ui);color:var(--ink);-webkit-font-smoothing:antialiased;
+     user-select:none;-webkit-user-select:none;touch-action:manipulation}
+button{font-family:inherit;cursor:pointer;-webkit-tap-highlight-color:transparent}
+input{user-select:text;-webkit-user-select:text}
+mark{background:var(--y300);color:inherit;border-radius:10px;padding:0 8px}
+
+/* =====================================================================
+   2) المسرح الثابت 16:9 (1920×1080) — يُكبَّر/يُصغَّر ليناسب أي شاشة
+      دون أي تمرير ودون تغيُّر في التخطيط بين الشرائح
+   ===================================================================== */
+#stage{position:absolute;left:50%;top:50%;width:1920px;height:1080px;
+       transform-origin:center center;overflow:hidden;background:var(--frame)}
+#wave{position:absolute;inset:0;width:100%;height:100%}
+#paper{position:absolute;left:82px;right:82px;top:66px;bottom:66px;border-radius:38px;
+  border:7px solid #fff;box-shadow:0 18px 40px rgba(79,47,134,.18);
+  background-color:#fff;
+  background-image:
+    linear-gradient(90deg, rgba(196,176,236,.30) 50%, transparent 50%),
+    linear-gradient(0deg,  rgba(250,228,140,.34) 50%, transparent 50%);
+  background-size:96px 96px}
+#slides{position:absolute;left:89px;right:89px;top:73px;bottom:73px;border-radius:32px;overflow:hidden}
+
+/* الزخارف (قلب + زهور) */
+.deco{position:absolute;pointer-events:none;z-index:5}
+.deco-heart{top:26px;left:40px;width:120px;animation:bob 6s ease-in-out infinite}
+.deco-flowers{bottom:12px;right:34px;width:190px}
+
+/* شريط التقدم */
+#progress{position:absolute;top:22px;left:50%;transform:translateX(-50%);width:640px;height:12px;
+  background:rgba(255,255,255,.7);border-radius:99px;overflow:hidden;z-index:6}
+#progress i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--y500),var(--p600));
+  border-radius:99px;transition:width .6s ease;margin-inline-start:auto}
+
+/* عدّاد الشرائح — الزاوية اليسرى السفلية */
+#counter{position:absolute;left:110px;bottom:18px;z-index:20;font:800 30px var(--f-ui);
+  color:var(--p800);background:#fff;padding:8px 26px;border-radius:99px;box-shadow:0 6px 0 var(--p300)}
+
+/* =====================================================================
+   3) شريط التحكم السفلي (يختفي تلقائيًا عند عدم تحريك الماوس)
+   ===================================================================== */
+#controls{position:absolute;bottom:22px;left:50%;transform:translateX(-50%);z-index:30;
+  display:flex;align-items:center;gap:12px;direction:ltr;
+  background:rgba(59,34,99,.92);padding:10px 14px;border-radius:99px;
+  box-shadow:0 14px 34px rgba(59,34,99,.35);transition:opacity .45s ease, transform .45s ease}
+#controls button{border:0;border-radius:99px;font:800 30px var(--f-ui);color:#fff;background:rgba(255,255,255,.12);
+  padding:12px 30px;transition:transform .15s, background .2s;direction:rtl}
+#controls button:hover{background:rgba(255,255,255,.25);transform:translateY(-2px)}
+#controls button:active{transform:scale(.93)}
+#controls #cNum{background:transparent;cursor:default;min-width:150px;font-weight:900;direction:ltr}
+#controls #cClap{background:var(--y500);color:var(--p900);font-size:40px;padding:6px 26px}
+#controls #cClap.pulse{animation:clapPulse .5s ease}
+#controls #cFull{font-size:30px;padding:12px 22px}
+#hint{position:absolute;right:110px;bottom:22px;z-index:30;font:700 22px var(--f-ui);color:var(--p800);
+  background:rgba(255,255,255,.9);padding:10px 22px;border-radius:99px;transition:opacity .45s ease}
+#hint span{unicode-bidi:isolate;white-space:nowrap}
+#hint b{font-weight:900}
+body.idle #controls{opacity:0;transform:translate(-50%,40px);pointer-events:none}
+body.idle #hint{opacity:0}
+@media (hover:none){#hint{display:none}}   /* الأجهزة اللمسية (آيباد): لا حاجة لتلميح لوحة المفاتيح */
+body.idle{cursor:none}
+
+/* =====================================================================
+   4) الشريحة + انتقالات (Fade / Slide / Zoom)
+   ===================================================================== */
+.slide{position:absolute;inset:0;display:flex;flex-direction:column;padding:38px 64px 104px;
+  visibility:hidden;opacity:0;pointer-events:none}
+.slide.active{visibility:visible;opacity:1;pointer-events:auto;z-index:2}
+.slide.leaving{visibility:visible;animation:outFade .38s ease forwards;z-index:1}
+.slide.active.a-fade{animation:inFade .7s ease both}
+.slide.active.a-zoom{animation:inZoom .75s cubic-bezier(.2,.8,.2,1) both}
+.slide.active.a-slide.d-next{animation:inFromLeft .7s cubic-bezier(.2,.8,.2,1) both}
+.slide.active.a-slide.d-prev{animation:inFromRight .7s cubic-bezier(.2,.8,.2,1) both}
+@keyframes inFade{from{opacity:0}to{opacity:1}}
+@keyframes outFade{to{opacity:0}}
+@keyframes inZoom{from{opacity:0;transform:scale(.93)}to{opacity:1;transform:none}}
+@keyframes inFromLeft{from{opacity:0;transform:translateX(-140px)}to{opacity:1;transform:none}}
+@keyframes inFromRight{from{opacity:0;transform:translateX(140px)}to{opacity:1;transform:none}}
+
+/* ظهور العناصر بالتتابع */
+.slide.active .rv{animation:rvIn .7s cubic-bezier(.2,.8,.2,1) both;animation-delay:calc(.18s + var(--i,0) * .11s)}
+@keyframes rvIn{from{opacity:0;transform:translateY(26px)}to{opacity:1;transform:none}}
+
+/* حركات عامة */
+@keyframes bob{0%,100%{transform:translateY(0) rotate(0)}50%{transform:translateY(-12px) rotate(2deg)}}
+@keyframes popIn{0%{transform:scale(.6);opacity:0}70%{transform:scale(1.06);opacity:1}100%{transform:scale(1)}}
+@keyframes shake{20%,60%{transform:translateX(-12px)}40%,80%{transform:translateX(12px)}}
+@keyframes clapPulse{50%{transform:scale(1.25) rotate(-8deg)}}
+@keyframes glow{0%,100%{box-shadow:0 0 0 0 rgba(242,203,69,.0)}50%{box-shadow:0 0 0 12px rgba(242,203,69,.45)}}
+.pop{animation:popIn .5s cubic-bezier(.3,1.4,.5,1) both}
+.shake{animation:shake .45s ease}
+
+/* =====================================================================
+   5) عناصر مشتركة
+   ===================================================================== */
+.s-head{display:flex;align-items:center;justify-content:space-between;gap:24px;margin-bottom:24px;min-height:110px}
+.s-title{margin:0;font:700 64px/1.55 var(--f-text);color:var(--p800);padding:0 14px;
+  background:linear-gradient(transparent 60%, var(--y300) 60%, var(--y300) 88%, transparent 88%)}
+.head-tools{display:flex;align-items:center;gap:16px}
+.badge{font:800 32px var(--f-ui);color:#fff;background:var(--p600);padding:12px 30px;border-radius:99px;
+  box-shadow:0 6px 0 var(--p800);white-space:nowrap}
+.icon-btn{border:3px solid var(--p300);background:#fff;color:var(--p700);width:62px;height:62px;border-radius:50%;
+  font:900 30px var(--f-ui);display:inline-grid;place-items:center;transition:transform .15s, background .2s;flex:none}
+.icon-btn:hover{background:var(--p100);transform:rotate(-20deg)}
+.icon-btn:active{transform:scale(.9)}
+.reset{opacity:.55}.reset:hover{opacity:1}
+
+.card{background:rgba(255,255,255,.95);border-radius:34px;box-shadow:var(--shadow);border:3px solid var(--p200)}
+.intro{margin:0 0 18px;text-align:center;font:700 40px var(--f-text);color:var(--p700)}
+.body{flex:1;min-height:0;display:flex;flex-direction:column;gap:24px}
+
+.btn{border:0;border-radius:99px;background:var(--p700);color:#fff;font:800 34px var(--f-ui);padding:16px 40px;
+  box-shadow:0 7px 0 var(--p900);transition:transform .15s, box-shadow .15s, background .2s;white-space:nowrap}
+.btn:hover{transform:translateY(-3px);background:var(--p600)}
+.btn:active{transform:translateY(5px);box-shadow:0 2px 0 var(--p900)}
+.btn.soft{background:#fff;color:var(--p700);box-shadow:0 7px 0 var(--p300);border:3px solid var(--p300)}
+.btn.soft:hover{background:var(--p100)}
+.btn.yellow{background:var(--y500);color:var(--p900);box-shadow:0 7px 0 #c9a227}
+.btn.big{font-size:48px;padding:24px 70px}
+.btn-row{display:flex;justify-content:center;align-items:center;gap:22px;flex-wrap:wrap}
+.rc{color:var(--root)}        /* حروف ف ع ل الملوّنة */
+
+/* رسالة التغذية الراجعة */
+.feedback{min-height:96px;display:flex;justify-content:center;align-items:center}
+.msg{font:800 46px var(--f-ui);padding:14px 46px;border-radius:99px}
+.msg.ok{background:var(--okbg);color:var(--ok);border:3px solid #9bd9b8}
+.msg.bad{background:var(--badbg);color:var(--bad);border:3px solid #f3b4c3}
+
+/* المؤقت */
+.timer{display:flex;align-items:center;gap:18px;justify-content:center}
+.t-ring{position:relative;width:150px;height:150px}
+.t-ring svg{width:100%;height:100%;transform:rotate(-90deg)}
+.t-track{fill:#fff;stroke:var(--p200);stroke-width:12}
+.t-bar{fill:none;stroke:var(--p600);stroke-width:12;stroke-linecap:round;transition:stroke-dashoffset 1s linear, stroke .3s}
+.t-num{position:absolute;inset:0;display:grid;place-items:center;font:900 40px var(--f-ui);color:var(--p800);direction:ltr}
+.t-btns{display:flex;flex-direction:column;gap:12px}
+.timer.low .t-bar{stroke:var(--bad)} .timer.low .t-num{color:var(--bad)}
+.timer.done .t-ring{animation:shake .5s ease 2}
+
+/* =====================================================================
+   6) أنماط كل نوع من الشرائح
+   ===================================================================== */
+
+/* — الغلاف — */
+.cover{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:14px;padding-bottom:10px}
+.cover-pill{font:800 34px var(--f-ui);color:var(--p700);background:var(--p100);border:3px solid var(--p300);padding:10px 36px;border-radius:99px}
+.cover-greet{margin:0;font:700 48px/1.7 var(--f-text);color:var(--p600)}
+.cover-title{margin:0;font:700 176px/1.45 var(--f-text);color:var(--p800);text-shadow:7px 7px 0 var(--y300)}
+.cover-sub{margin:0;font:700 56px/1.6 var(--f-text);color:var(--p700);background:#fff;padding:4px 46px;border-radius:99px;box-shadow:var(--shadow)}
+.cover-meta{font:700 32px var(--f-ui);color:var(--p500);margin-top:8px}
+.cover-books{position:absolute;left:40px;bottom:96px;width:360px;pointer-events:none}
+.cover-books img{width:100%;display:block;transform:rotate(-6deg);border-radius:26px;animation:bob 7s ease-in-out infinite}
+.floaty{position:absolute;font-size:74px;opacity:.85;animation:bob 5s ease-in-out infinite;pointer-events:none}
+
+/* — البطاقات المقلوبة — */
+.flip-grid{flex:1;min-height:0;display:flex;flex-wrap:wrap;justify-content:center;align-content:center;gap:30px}
+.flip{width:calc((100% - (var(--cols) - 1) * 30px) / var(--cols));
+      height:min(calc((100% - (var(--rows) - 1) * 30px) / var(--rows)), 330px);perspective:1600px;cursor:pointer}
+.flip-in{position:relative;width:100%;height:100%;transition:transform .75s cubic-bezier(.3,.7,.2,1);transform-style:preserve-3d}
+.flip.flipped .flip-in{transform:rotateY(180deg)}
+.flip:hover .front{border-color:var(--p500)}
+.face{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;border-radius:34px;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:22px 28px;text-align:center}
+.front{background:#fff;border:4px solid var(--p200);box-shadow:var(--shadow);transition:border-color .2s}
+.back{background:linear-gradient(155deg,var(--p600),var(--p800));color:#fff;transform:rotateY(180deg);box-shadow:var(--shadow)}
+.f-ico{font-size:64px;line-height:1}
+.f-txt{font:700 46px/1.6 var(--f-text);color:var(--ink)}
+.tap{font:700 24px var(--f-ui);color:var(--p500)}
+.b-ico{font-size:66px;line-height:1}
+.b-txt{font:700 42px/1.65 var(--f-text)}
+.back mark{background:var(--y300);color:var(--p900)}
+.flip.weights .f-txt{font-size:86px;line-height:1.5}
+.flip.weights .b-txt{font-size:62px}
+
+/* — شريط الذكريات — */
+.strip{flex:1;min-height:0;position:relative;display:flex;gap:22px;padding:56px 30px;border-radius:28px;
+  background:#3a2860;box-shadow:0 16px 36px rgba(59,34,99,.3)}
+.strip::before,.strip::after{content:'';position:absolute;left:24px;right:24px;height:22px;
+  background:radial-gradient(ellipse 13px 9px at center, #fdf0c2 92%, transparent 100%) 0 0 / 46px 22px repeat-x}
+.strip::before{top:17px}.strip::after{bottom:17px}
+.mframe{flex:1;min-width:0;position:relative;background:#fff;border-radius:18px;padding:58px 16px 18px;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;text-align:center;cursor:pointer;
+  rotate:var(--tilt);transition:rotate .3s, translate .3s, box-shadow .3s, background .3s}
+.mframe:hover{rotate:0deg;translate:0 -6px}
+.mframe.current{box-shadow:0 0 0 7px var(--y500)}
+.mframe.dev{background:var(--y100)}
+.mf-num{position:absolute;top:12px;left:50%;transform:translateX(-50%);white-space:nowrap;font:800 24px var(--f-ui);
+  color:var(--p700);background:var(--p100);border-radius:99px;padding:4px 16px}
+.mf-q{font:700 36px/1.6 var(--f-text);color:var(--ink);transition:font-size .4s}
+.mframe.dev:not(.quiz) .mf-q{font-size:26px;color:var(--p600)}
+.mf-hint{font:700 22px var(--f-ui);color:var(--p500)}
+.mframe.dev .mf-hint{display:none}
+.mf-a{display:none;font:700 38px/1.7 var(--f-text);color:var(--p900)}
+.mframe.dev .mf-a{display:block;animation:develop 1.1s ease both}
+.mf-ex{margin-top:8px;font-size:32px;color:var(--p700);background:#fff;border:3px solid var(--p200);border-radius:16px;padding:0 12px}
+@keyframes develop{from{filter:blur(12px) sepia(1) brightness(1.5);opacity:.15}to{filter:none;opacity:1}}
+.mf-word{font:700 60px/1.4 var(--f-text);color:var(--root)}
+.mf-choices{display:flex;flex-direction:column;gap:12px;width:100%}
+.mf-choices .opt{font-size:30px;padding:8px 14px;border-radius:18px;justify-content:center}
+.mf-fb{min-height:40px;font:800 24px var(--f-ui)}
+.mf-fb.ok{color:var(--ok)} .mf-fb.bad{color:var(--bad)}
+
+/* — الأهداف — */
+.goals{flex:1;display:flex;gap:40px;align-items:center;justify-content:center}
+.goal{flex:1;max-width:500px;min-height:430px;position:relative;padding:70px 34px 40px;text-align:center;cursor:pointer;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:20px;transition:border-color .3s, transform .2s}
+.goal:hover{transform:translateY(-6px)}
+.g-num{position:absolute;top:-36px;left:50%;margin-left:-38px;width:76px;height:76px;border-radius:50%;background:var(--y500);
+  color:var(--p900);font:900 42px var(--f-ui);display:grid;place-items:center;box-shadow:0 6px 0 #c9a227}
+.g-ico{font-size:96px;animation:bob 4.5s ease-in-out infinite}
+.g-txt{font:700 46px/1.7 var(--f-text)}
+.goal.done{border-color:var(--ok);background:var(--okbg)}
+.goal.done::after{content:'✓';position:absolute;top:18px;right:24px;font:900 50px var(--f-ui);color:var(--ok)}
+
+/* — الألغاز (ماذا تتوقعين؟) — */
+.riddles{flex:1;display:flex;gap:36px;min-height:0}
+.riddle{flex:1;padding:30px 28px;display:flex;flex-direction:column;align-items:center;justify-content:space-around;text-align:center;cursor:pointer;transition:transform .2s}
+.riddle:hover{transform:translateY(-6px)}
+.r-clue{font:700 44px/1.7 var(--f-text)}
+.r-q{width:170px;height:170px;border-radius:50%;background:var(--y200);display:grid;place-items:center;
+  font:900 100px var(--f-ui);color:var(--p600);border:5px dashed var(--y500)}
+.riddle.open .r-q{border-style:solid;background:#fff;animation:popIn .55s cubic-bezier(.3,1.4,.5,1)}
+.r-ans{font:700 60px/1.5 var(--f-text);color:var(--p800);min-height:90px}
+.r-verb{font:700 32px var(--f-ui);color:var(--p500);min-height:42px}
+.final{min-height:130px;display:flex;justify-content:center;align-items:center}
+.final-box{font:700 44px/1.7 var(--f-text);padding:18px 46px;text-align:center}
+
+/* — القصة (لاحظي واكتشفي) — */
+.story{flex:1;font:600 47px/2.15 var(--f-text);padding:30px 54px;text-align:justify;display:flex;align-items:center}
+.story p{margin:0}
+.tw{cursor:pointer;border-radius:14px;padding:0 4px;transition:background .25s, color .25s}
+.tw:hover{background:var(--p100)}
+.tw.found{background:var(--y300);color:var(--root);font-weight:700}
+.story.hint .tw:not(.found){animation:glow 1.6s ease-in-out infinite;background:var(--y100)}
+.story-bar{display:flex;align-items:center;gap:20px;min-height:96px}
+.disc{flex:1;display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+.chip{font:700 30px var(--f-text);background:#fff;border:3px solid var(--p300);border-radius:99px;padding:6px 22px;color:var(--p800)}
+.count-pill{font:800 30px var(--f-ui);background:var(--p700);color:#fff;border-radius:99px;padding:10px 24px;white-space:nowrap}
+.note{position:absolute;left:64px;right:64px;bottom:104px;padding:26px 44px;font:700 42px/1.8 var(--f-text);
+  text-align:center;background:var(--y100);border-color:var(--y500);z-index:4;display:none}
+.note.show{display:block;animation:popIn .5s both}
+.note .x{position:absolute;top:12px;left:16px}
+
+/* — أكملي (أبني تعلمي) — */
+.fill-list{flex:1;display:flex;flex-direction:column;gap:16px;justify-content:center}
+.fill-row{display:flex;align-items:center;gap:26px;padding:8px 34px}
+.fr-ico{font-size:54px;width:76px;text-align:center}
+.fr-txt{font:700 46px/1.7 var(--f-text)}
+.blank{min-width:290px;height:78px;border:4px dashed var(--p300);border-radius:22px;font:700 46px var(--f-text);
+  color:var(--p500);background:var(--p100);transition:transform .15s}
+.blank:hover{transform:scale(1.04)}
+.blank.open{border-style:solid;border-color:var(--ok);color:var(--ok);background:var(--okbg);animation:popIn .45s}
+.wchip{margin-inline-start:auto;font:700 38px var(--f-text);color:var(--p700);background:#fff;border:3px solid var(--p200);
+  border-radius:20px;padding:2px 26px;opacity:0;transform:scale(.7);transition:all .45s cubic-bezier(.3,1.4,.5,1)}
+.wchip.show{opacity:1;transform:none}
+.fill-foot{display:flex;align-items:center;justify-content:center;gap:24px;min-height:80px}
+.foot-txt{font:700 46px var(--f-text);color:var(--root);display:none}
+.foot-txt.show{display:block;animation:popIn .5s both}
+
+/* — ربط بالوطن — */
+.hl-grid{flex:1;min-height:0;display:grid;grid-template-columns:repeat(3,1fr);grid-auto-rows:1fr;gap:22px}
+.hl-card{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;padding:10px 18px;text-align:center;min-height:0}
+.hl-place{font:800 26px var(--f-ui);color:var(--p600);background:var(--p100);border-radius:99px;padding:2px 22px}
+.hl-txt{font:700 34px/1.55 var(--f-text)}
+.hl-ans{display:flex;align-items:center;justify-content:center;gap:14px}
+.hl-card .blank{min-width:230px;height:62px;font-size:36px}
+.hl-card .wchip{margin:0;font-size:28px;padding:0 16px}
+.slide .final.hl-final{min-height:96px}
+
+/* — التعريف التدريجي (أستنتج) — */
+.def-lead{margin:0;text-align:center;font:700 46px/1.7 var(--f-text);color:var(--p700)}
+.def-box{flex:1;max-height:420px;padding:40px 60px;font:700 64px/2 var(--f-text);display:flex;flex-wrap:wrap;
+  justify-content:center;align-content:center;gap:8px 18px;cursor:pointer}
+.piece{padding:0 18px;border-radius:18px;transition:all .4s}
+.piece.hide{color:transparent;background:var(--p100)}
+.piece.shown{background:var(--y200);animation:popIn .5s both}
+.piece.shown:first-child{color:var(--root)}
+.def-ex{text-align:center;font:700 44px var(--f-text);color:var(--p800);opacity:0;transition:opacity .5s}
+.def-ex.show{opacity:1}
+
+/* — الشجرة (الأنواع) — */
+.tree{flex:1;display:flex;flex-direction:column;align-items:center}
+.t-root{font:700 56px/1.6 var(--f-text);color:#fff;background:var(--p700);padding:10px 64px;border-radius:28px;box-shadow:0 8px 0 var(--p900)}
+.t-stem{width:6px;height:36px;background:var(--p300)}
+.t-conn{width:52%;height:46px;border:6px solid var(--p300);border-bottom:0;border-radius:30px 30px 0 0}
+.t-branches{display:flex;width:100%;justify-content:space-around;flex:1;min-height:0}
+.t-br{width:44%;display:flex;flex-direction:column;align-items:center;gap:20px}
+.t-head{border:0;font:700 46px/1.6 var(--f-text);padding:10px 44px;border-radius:24px;background:var(--y300);color:var(--p900);box-shadow:0 7px 0 var(--y500);transition:transform .15s}
+.t-head:hover{transform:translateY(-3px)}
+.t-head small{display:block;font:700 24px var(--f-ui);color:var(--p600)}
+.t-br.open .t-head small{display:none}
+.t-content{width:100%;padding:24px 30px;text-align:center;font:700 38px/1.8 var(--f-text);opacity:0;transform:translateY(-16px);transition:all .5s ease}
+.t-br.open .t-content{opacity:1;transform:none}
+.ex-chips{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;margin-top:10px}
+.ex{background:var(--p100);border-radius:16px;padding:2px 22px;color:var(--p800)}
+
+/* — العصف الذهني — */
+.bs{flex:1;display:flex;gap:34px;min-height:0}
+.bs-cloud{flex:1;position:relative;border-radius:36px;background:rgba(255,255,255,.78);border:4px dashed var(--p300);overflow:hidden}
+.bs-center{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:250px;height:250px;border-radius:50%;
+  background:radial-gradient(circle at 35% 30%,var(--p500),var(--p800));color:#fff;font:700 46px/1.5 var(--f-text);
+  display:grid;place-items:center;text-align:center;box-shadow:0 0 0 18px rgba(154,127,214,.22)}
+.bubble{position:absolute;transform:translate(-50%,-50%);font:700 40px/1.5 var(--f-text);background:#fff;border:3px solid var(--p300);
+  border-radius:99px;padding:6px 30px;white-space:nowrap;box-shadow:0 8px 18px rgba(79,47,134,.12);
+  animation:bubbleIn .55s cubic-bezier(.3,1.6,.5,1) both;cursor:pointer}
+.bubble:nth-child(3n){background:var(--y200);border-color:var(--y500)}
+.bubble:nth-child(3n+1){background:var(--p100)}
+@keyframes bubbleIn{from{transform:translate(-50%,-50%) scale(0)}to{transform:translate(-50%,-50%) scale(1)}}
+.bs-side{width:470px;display:flex;flex-direction:column;gap:18px}
+.bs-q{padding:22px 28px;font:700 36px/1.7 var(--f-text);text-align:center}
+.bs-add{display:flex;gap:12px}
+.bs-input{flex:1;min-width:0;font:700 36px var(--f-text);padding:10px 22px;border-radius:22px;border:3px solid var(--p300);outline:none;color:var(--ink)}
+.bs-input:focus{border-color:var(--p600)}
+.bs-count{text-align:center;font:800 32px var(--f-ui);color:var(--p700)}
+
+/* — فكري زاوجي شاركي — */
+.tps{flex:1;display:flex;gap:40px;min-height:0}
+.tps-side{width:500px;display:flex;flex-direction:column;gap:16px}
+.phase{display:flex;align-items:center;gap:20px;padding:12px 26px;cursor:pointer;transition:all .25s;text-align:start}
+.phase.on{border-color:var(--p600);background:var(--p100);transform:scale(1.03)}
+.ph-ico{font-size:56px}
+.ph-name{font:700 44px/1.5 var(--f-text);color:var(--p800)}
+.ph-desc{font:700 26px var(--f-ui);color:#7a6a9c}
+.tps-main{flex:1;display:flex;flex-direction:column;gap:16px;min-width:0}
+.tps-task{padding:14px 30px;font:700 40px/1.7 var(--f-text);text-align:center}
+.tbl{display:grid;grid-template-columns:1fr 1.25fr 1.25fr;gap:10px}
+.th{background:var(--p700);color:#fff;font:800 32px var(--f-ui);text-align:center;padding:12px;border-radius:16px}
+.td{background:#fff;border:3px solid var(--p200);font:700 40px/1.45 var(--f-text);text-align:center;padding:6px;border-radius:16px}
+.td.verb{background:var(--y200);border-color:var(--y300)}
+.td.ans{cursor:pointer;color:var(--p300)}
+.td.ans:hover{background:var(--p100)}
+.td.ans.open{color:var(--ok);background:var(--okbg);border-color:#9bd9b8;animation:popIn .4s}
+
+/* — اختيار من متعدد — */
+.mcq-q{padding:22px 44px;font:700 56px/1.7 var(--f-text);text-align:center}
+.opts{flex:1;display:grid;grid-template-columns:1fr 1fr;gap:26px;align-content:center}
+.opt{display:flex;align-items:center;gap:26px;font:700 50px/1.5 var(--f-text);background:#fff;color:var(--ink);
+  border:4px solid var(--p200);border-radius:30px;padding:16px 30px;box-shadow:0 8px 0 var(--p200), var(--shadow);
+  transition:transform .15s, border-color .2s, background .2s;text-align:start}
+.opt:hover{transform:translateY(-4px);border-color:var(--p500)}
+.opt:active{transform:translateY(5px);box-shadow:0 2px 0 var(--p200)}
+.opt .o-ico{font-size:58px;width:96px;height:96px;flex:none;display:grid;place-items:center;background:var(--p100);border-radius:24px}
+.opt.correct{background:var(--okbg);border-color:var(--ok);box-shadow:0 8px 0 #9bd9b8}
+.opt.correct .o-ico{background:#fff}
+.opt.wrong{background:var(--badbg);border-color:var(--bad);opacity:.7;box-shadow:0 8px 0 #f3b4c3}
+.explain{text-align:center;font:700 40px/1.7 var(--f-text);color:var(--p800);background:var(--y100);border:3px solid var(--y300);
+  border-radius:24px;padding:10px 30px;display:none;align-self:center}
+.explain.show{display:block;animation:popIn .5s both}
+
+/* — استخرجي الكلمة — */
+.ex-list{flex:1;display:flex;flex-direction:column;gap:18px;justify-content:center}
+.ex-row{display:flex;align-items:center;gap:24px;padding:10px 30px}
+.ex-n{width:62px;height:62px;flex:none;border-radius:50%;background:var(--y300);display:grid;place-items:center;font:900 32px var(--f-ui);color:var(--p800)}
+.ex-sent{flex:1;font:700 46px/1.8 var(--f-text)}
+.w{cursor:pointer;border-radius:12px;padding:0 4px;display:inline-block;transition:background .2s}
+.w:hover{background:var(--p100)}
+.w.ok{background:var(--okbg);color:var(--ok)}
+.w.no{color:var(--bad)}
+.ex-ans{min-width:330px;text-align:center;font:700 36px/1.6 var(--f-text);padding:8px 18px;border-radius:20px;background:var(--p100);color:var(--p300)}
+.ex-ans.show{background:var(--okbg);color:var(--ok);animation:popIn .45s}
+
+/* — صح أم خطأ — */
+.tf-list{flex:1;display:flex;flex-direction:column;gap:18px;justify-content:center}
+.tf-row{display:flex;align-items:center;gap:24px;padding:14px 30px;transition:border-color .3s, background .3s}
+.tf-row.solved{border-color:var(--ok);background:#f6fcf8}
+.tf-main{flex:1}
+.tf-txt{font:700 44px/1.65 var(--f-text)}
+.tf-exp{font:700 30px var(--f-ui);color:var(--p600);display:none;margin-top:4px}
+.tf-row.solved .tf-exp{display:block;animation:popIn .45s both}
+.tf-btn{border:3px solid;border-radius:22px;font:800 34px var(--f-ui);padding:12px 30px;transition:transform .15s}
+.tf-btn:hover{transform:translateY(-3px)}
+.tf-btn.yes{background:var(--okbg);color:var(--ok);border-color:#9bd9b8}
+.tf-btn.no{background:var(--badbg);color:var(--bad);border-color:#f3b4c3}
+.tf-btn.picked{outline:5px solid var(--y500)}
+
+/* — كلمة واحدة بمعنيين — */
+.tm-top{text-align:center}
+.tm-word{font:700 100px/1.4 var(--f-text);color:var(--root)}
+.tm-word small{font:700 36px var(--f-ui);color:var(--p600);margin-inline-start:20px}
+.tm-prompt{margin:0;font:700 42px/1.6 var(--f-text);color:var(--p700)}
+.tm-cards{flex:1;display:flex;gap:40px;min-height:0}
+.tm-card{flex:1;padding:24px 30px;display:flex;flex-direction:column;align-items:center;justify-content:space-around;gap:12px;text-align:center}
+.tm-sent{font:700 48px/1.8 var(--f-text)}
+.tm-opts{display:flex;gap:16px}
+.tm-opts .opt{font-size:36px;padding:10px 26px;border-radius:22px}
+.tm-res{min-height:56px;font:700 36px var(--f-text);color:var(--ok)}
+.tm-concl{text-align:center;min-height:70px}
+
+/* — تحدّي الدقيقة — */
+.ch{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:30px;padding:30px}
+.ch-ico{font-size:120px;animation:bob 3s ease-in-out infinite}
+.ch-desc{margin:0;font:700 46px/1.7 var(--f-text);text-align:center;color:var(--p800)}
+.ch-top{display:flex;gap:26px}
+.stat{font:800 40px var(--f-ui);background:var(--p100);color:var(--p800);border-radius:99px;padding:10px 34px;border:3px solid var(--p200)}
+.stat.low{background:var(--badbg);color:var(--bad);border-color:#f3b4c3}
+.ch-word{font:700 120px/1.5 var(--f-text);color:var(--p800);background:#fff;border:5px solid var(--p200);border-radius:40px;
+  padding:6px 90px;min-width:680px;text-align:center;box-shadow:var(--shadow)}
+.ch-word small{display:block;font:700 34px var(--f-ui);color:var(--bad)}
+.ch-word.ok{border-color:var(--ok);background:var(--okbg)}
+.ch-word.bad{border-color:var(--bad);background:var(--badbg);animation:shake .45s}
+.ch-cats{display:flex;gap:28px}
+.cat{border:0;font:700 46px/1.5 var(--f-text);padding:16px 46px;border-radius:30px;transition:transform .15s}
+.cat:hover{transform:translateY(-4px)} .cat:active{transform:scale(.94)}
+.cat-0{background:var(--p700);color:#fff;box-shadow:0 8px 0 var(--p900)}
+.cat-1{background:var(--y500);color:var(--p900);box-shadow:0 8px 0 #c9a227}
+.cat-2{background:#fff;color:var(--p800);border:4px solid var(--p300);box-shadow:0 8px 0 var(--p300)}
+.ch-result{font:700 70px/1.6 var(--f-text);color:var(--p800);text-align:center}
+.ch-result b{color:var(--root)}
+
+/* — التعلم التعاوني — */
+.gr{flex:1;display:flex;gap:36px;min-height:0}
+.gr-task{flex:1;padding:26px 40px;display:flex;flex-direction:column;gap:14px}
+.gr-title{font:700 46px/1.6 var(--f-text);color:var(--p800);margin:0}
+.gr-steps{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:8px}
+.gr-steps li{font:700 38px/1.7 var(--f-text);display:flex;gap:16px;align-items:center}
+.gr-steps li .n{width:52px;height:52px;flex:none;border-radius:50%;background:var(--y300);display:grid;place-items:center;font:900 28px var(--f-ui)}
+.roles{display:flex;flex-wrap:wrap;gap:12px;margin-top:auto}
+.li-t{flex:1}
+.role{font:700 30px var(--f-ui);background:var(--p100);color:var(--p800);border-radius:99px;padding:8px 24px;border:2px solid var(--p200)}
+.gr-side{width:620px;display:flex;flex-direction:column;gap:14px}
+.g-row{display:flex;align-items:center;gap:14px;padding:8px 20px}
+.g-name{flex:1;font:700 36px/1.6 var(--f-text)}
+.g-score{font:900 42px var(--f-ui);color:var(--p700);min-width:110px;text-align:center}
+.g-score.pop{color:var(--root)}
+
+/* — التقييم الذاتي + الواجب — */
+.exit{flex:1;display:flex;gap:40px;min-height:0}
+.self{flex:1.1;padding:26px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:28px}
+.self-q{margin:0;font:700 46px/1.6 var(--f-text);text-align:center;color:var(--p800)}
+.emos{display:flex;gap:24px}
+.emo{width:230px;padding:18px 10px;border-radius:30px;background:#fff;border:4px solid var(--p200);display:flex;flex-direction:column;
+  align-items:center;gap:6px;transition:transform .15s;box-shadow:0 7px 0 var(--p200)}
+.emo:hover{transform:translateY(-5px)} .emo:active{transform:scale(.94)}
+.emo .e{font-size:92px;line-height:1.2}
+.emo .l{font:700 30px var(--f-text);color:var(--ink)}
+.emo .c{font:900 40px var(--f-ui);color:var(--p700)}
+.hw{flex:1;padding:30px 40px;display:flex;flex-direction:column;gap:18px;background:var(--y100);border-color:var(--y300)}
+.hw h3{margin:0;font:700 48px/1.6 var(--f-text);color:var(--p800)}
+.hw ol{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:18px}
+.hw li{font:700 38px/1.75 var(--f-text);display:flex;gap:16px}
+.hw li .n{width:52px;height:52px;flex:none;border-radius:50%;background:var(--p600);color:#fff;display:grid;place-items:center;font:900 28px var(--f-ui);margin-top:12px}
+
+/* — الختام — */
+.closing{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:20px;text-align:center}
+.cl-emoji{font-size:130px;animation:bob 4s ease-in-out infinite}
+.cl-title{margin:0;font:700 112px/1.5 var(--f-text);color:var(--p800);text-shadow:6px 6px 0 var(--y300)}
+.cl-msg{margin:0;max-width:1350px;font:700 50px/1.8 var(--f-text);color:var(--p700)}
+.cl-quote{font:800 38px var(--f-ui);background:var(--y200);color:var(--p900);padding:14px 44px;border-radius:99px;border:3px solid var(--y300)}
+
+/* =====================================================================
+   7) طبقة المؤثرات (تصفيق / احتفال)
+   ===================================================================== */
+#fx{position:fixed;inset:0;pointer-events:none;z-index:999;overflow:hidden}
+.fly{position:absolute;line-height:1;will-change:transform,opacity}
+.conf{position:absolute;will-change:transform,opacity}
+</style>
+</head>
+<body>
+
+<div id="stage">
+  <!-- الإطار الأصفر المموّج (يُرسم بالجافاسكربت) -->
+  <svg id="wave" viewBox="0 0 1920 1080" preserveAspectRatio="none" aria-hidden="true"><path id="wavePath" fill="#fcefc0"/></svg>
+  <!-- الورقة المربعات -->
+  <div id="paper"></div>
+
+  <!-- زخارف -->
+  <svg class="deco deco-heart" viewBox="0 0 120 110" aria-hidden="true">
+    <defs><pattern id="gh" width="14" height="14" patternUnits="userSpaceOnUse">
+      <rect width="14" height="14" fill="#efe6fb"/><rect width="7" height="14" fill="#9a7fd6" opacity=".55"/><rect width="14" height="7" fill="#9a7fd6" opacity=".55"/>
+    </pattern></defs>
+    <path d="M60 102 C20 74 6 52 8 34 C10 16 26 6 40 8 C50 9 56 15 60 23 C64 15 70 9 80 8 C94 6 110 16 112 34 C114 52 100 74 60 102Z"
+          fill="url(#gh)" stroke="#fff" stroke-width="7"/>
+    <path d="M60 102 C20 74 6 52 8 34 C10 16 26 6 40 8 C50 9 56 15 60 23 C64 15 70 9 80 8 C94 6 110 16 112 34 C114 52 100 74 60 102Z"
+          fill="none" stroke="#7d5bbf" stroke-width="3"/>
+  </svg>
+  <svg class="deco deco-flowers" viewBox="0 0 190 120" aria-hidden="true">
+    <g transform="translate(55 62)" stroke="#fff" stroke-width="5">
+      <circle cx="0" cy="-26" r="20" fill="#9a7fd6"/><circle cx="25" cy="-8" r="20" fill="#9a7fd6"/>
+      <circle cx="15" cy="21" r="20" fill="#9a7fd6"/><circle cx="-15" cy="21" r="20" fill="#9a7fd6"/>
+      <circle cx="-25" cy="-8" r="20" fill="#9a7fd6"/><circle r="9" fill="#fbe59a" stroke="none"/>
+    </g>
+    <g transform="translate(140 72) scale(.75)" stroke="#fff" stroke-width="6">
+      <circle cx="0" cy="-26" r="20" fill="#5b3f99"/><circle cx="25" cy="-8" r="20" fill="#5b3f99"/>
+      <circle cx="15" cy="21" r="20" fill="#5b3f99"/><circle cx="-15" cy="21" r="20" fill="#5b3f99"/>
+      <circle cx="-25" cy="-8" r="20" fill="#5b3f99"/><circle r="9" fill="#fbe59a" stroke="none"/>
+    </g>
+  </svg>
+
+  <div id="progress"><i></i></div>
+  <div id="slides"></div>
+  <div id="counter"></div>
+
+  <div id="hint">
+    <span><b>Space</b> = التالي</span> &nbsp;|&nbsp; <span><b>← →</b> للتنقل</span> &nbsp;|&nbsp; <span><b>ت</b> = تصفيق</span>
+  </div>
+
+  <nav id="controls" aria-label="التحكم بالعرض">
+    <button id="cPrev" type="button" title="السابق (←)">← السابق</button>
+    <button id="cNum" type="button" tabindex="-1"></button>
+    <button id="cNext" type="button" title="التالي (→ / Space)">التالي →</button>
+    <button id="cClap" type="button" title="تصفيق (ت)">👏</button>
+    <button id="cFull" type="button" title="ملء الشاشة">⛶</button>
+  </nav>
+</div>
+
+<div id="fx"></div>
+
+<script>
+'use strict';
+
+/* ╔═══════════════════════════════════════════════════════════════════╗
+   ║                      ⚙️ إعدادات الدرس                              ║
+   ║  عدّلي هنا فقط: العنوان، الرسائل، وكل الشرائح.                     ║
+   ║  • كل شريحة = كائن بين { } داخل القائمة SLIDES.                    ║
+   ║  • لحذف شريحة: احذفي الكائن كاملًا. لإضافة شريحة: انسخي واحدة      ║
+   ║    من نفس النوع وعدّلي نصوصها. (عدد الشرائح يُحسب تلقائيًا)        ║
+   ║  • anim: نوع الانتقال  'fade' | 'slide' | 'zoom'                   ║
+   ║  • strategy: اسم الاستراتيجية الذي يظهر في الشارة أعلى الشريحة.    ║
+   ║  • ضعي الكلمة بين نجمتين *هكذا* لتظليلها.                          ║
+   ╚═══════════════════════════════════════════════════════════════════╝ */
+
+const LESSON = {
+  title: 'اسمُ الآلةِ — لغتي',
+  volume: 0.8,                                  // مستوى الصوت (0 إلى 1)
+  correctMsg: 'أحسنتِ! 👏 إجابة صحيحة',
+  wrongMsg:   'حاولي مرة أخرى 💜',
+};
+
+const SLIDES = [
+
+  /* ① شريحة ترحيبية */
+  { type:'cover', anim:'zoom',
+    pill:'لغتي • الصفّ السادس الابتدائي',
+    greeting:'صباحُ العلمِ يا مُبدِعات 🌸 مستعدّاتٌ لمغامرةٍ لغويّةٍ؟',
+    title:'اسمُ الآلةِ',
+    subtitle:'الصِّنفُ اللُّغويُّ: المُشتقّاتُ',
+    meta:'المعلّمة: نسيم الشهراني    |    {date}',      // {date} = تاريخ اليوم تلقائيًا (هجري + ميلادي)
+    floaties:['🔑','🥄','🔭','🧮'] },
+
+  /* ② مراجعة الدرس السابق (اسم الفاعل واسم المفعول) — استراتيجية شريط الذكريات
+       كل إطار = ذكرى: q سؤال يظهر أولًا، a الإجابة تظهر عند الضغط، ex مثال
+       إطار السؤال الأخير: quiz = { word, choices, correct (يبدأ من 0) } */
+  { type:'memories', anim:'slide', strategy:'🎞️ شريطُ الذكريات',
+    title:'نسترجعُ ذكرياتِ درسِنا السابقِ',
+    intro:'اسمُ الفاعلِ واسمُ المفعولِ 🎬 اضغطي على الإطارِ لتظهرَ الذكرى',
+    frames:[
+      { icon:'⚖️', q:'ما حروفُ الميزانِ الصَّرفيِّ؟', a:'<span class="rc">فَ</span> — <span class="rc">عَ</span> — <span class="rc">لَ</span>' },
+      { icon:'🙋‍♀️', q:'على مَن يدلُّ اسمُ الفاعلِ؟', a:'على *مَن قامَ* بالفعلِ', ex:'كَتَبَ ← كَاتِب' },
+      { icon:'📦', q:'على مَن يدلُّ اسمُ المفعولِ؟', a:'على *مَن وقعَ عليه* الفعلُ', ex:'كَتَبَ ← مَكْتُوب' },
+      { icon:'🚪', q:'زِني: فَاتِح • مَفْتُوح', a:'فَاتِح ← <span class="rc">فَ</span>ا<span class="rc">عِ</span><span class="rc">ل</span><br>مَفْتُوح ← مَ<span class="rc">فْ</span><span class="rc">عُ</span>و<span class="rc">ل</span>' },
+      { icon:'🎯', quiz:{ word:'لَاعِبَة', choices:['اسمُ فاعلٍ','اسمُ مفعولٍ'], correct:0 } },
+    ],
+    nextBtn:'🎬 الذكرى التالية' },
+
+  /* ③ أهداف الدرس (اضغطي على الهدف لتعليمه ✓ بعد تحقّقه) */
+  { type:'goals', anim:'fade', strategy:'🎯 أهدافُنا اليوم',
+    title:'أهدافُ الدَّرسِ',
+    goals:[
+      { icon:'📘', text:'أُعرِّفُ اسمَ الآلةِ.' },
+      { icon:'🌳', text:'أُقارِنُ بينَ نوعَيِ اسمِ الآلةِ.' },
+      { icon:'🔍', text:'أُميِّزُ بينَ اسمِ الآلةِ وغيرِه منَ المُشتقّاتِ.' },
+    ] },
+
+  /* ④ تمهيد بسؤال (ماذا تتوقعين؟) — يربط بدرس اليوم */
+  { type:'riddles', anim:'zoom', strategy:'🔮 ماذا تتوقّعين؟',
+    title:'لُغزُ اليومِ.. مَن أنا؟',
+    riddles:[
+      { clue:'أداةٌ أفتحُ بها البابَ', icon:'🔑', answer:'مِفْتَاح', verb:'من الفعلِ: فَتَحَ' },
+      { clue:'أداةٌ أكنُسُ بها الغرفةَ', icon:'🧹', answer:'مِكْنَسَة', verb:'من الفعلِ: كَنَسَ' },
+      { clue:'أداةٌ أنظرُ بها إلى البعيدِ', icon:'🔭', answer:'مِنْظَار', verb:'من الفعلِ: نَظَرَ' },
+    ],
+    finalBtn:'🤔 ما الذي يجمعُ هذه الكلماتِ؟',
+    final:'كلُّها *أدواتٌ* نؤدّي بها أفعالًا.. إنّها موضوعُ درسِنا: *اسمُ الآلةِ* 🛠️' },
+
+  /* ⑤ لاحظي واكتشفي (المثال من الكتاب) — الكلمات المطلوبة بين [[ ]]
+       الصيغة: [[الكلمة|الفعل|أيقونة]] */
+  { type:'story', anim:'slide', strategy:'👀 لاحظي واكتشفي',
+    title:'يومٌ في حياةِ نُورةَ',
+    text:'اسْتَيْقَظَتْ نُورَةُ، وَأَضَاءَتِ [[الكَشَّافَ|كَشَفَ|🔦]]؛ لِتَنْظُرَ لِلسَّاعَةِ، وَفَتَحَتِ البَابَ [[بِالمِفْتَاحِ|فَتَحَ|🔑]]، وَوَضَعَتِ [[المِسْطَرَةَ|سَطَرَ|📏]] فِي الحَقِيبَةِ، وَطَبَعَتِ الوَرَقَةَ [[بِالطَّابِعَةِ|طَبَعَ|🖨️]]. ثُمَّ خَرَجَتْ إِلَى الفِنَاءِ، وَاسْتَمْتَعَتْ بِمَنْظَرِ [[النَّافُورَةِ|نَفَرَ|⛲]].',
+    task:'ابحثي عن *الأدواتِ* في القصّة',
+    note:'لاحظي: كلمةُ (مِفْتَاح) أُخِذَتْ من الفعلِ (فَتَحَ) للدّلالةِ على *الأداةِ* التي يُؤدّى بها الفعلُ، وتُسمّى *اسمَ الآلةِ* ✨' },
+
+  /* ⑥ أبني تعلّمي الجديد — أكملي الجملة (إظهار الإجابة تدريجيًا) */
+  { type:'fill', anim:'slide', strategy:'✏️ أبني تعلُّمي الجديد',
+    title:'أكمِلي الجملةَ..',
+    rows:[
+      { icon:'🔑', text:'أفتحُ البابَ بـ',                 answer:'المِفْتَاحِ',  weight:'مِفْعَال' },
+      { icon:'🥄', text:'آكلُ الطعامَ بـ',                 answer:'المِلْعَقَةِ', weight:'مِفْعَلَة' },
+      { icon:'📻', text:'أستمعُ للإذاعةِ بـ',              answer:'المِذْيَاعِ',  weight:'مِفْعَال' },
+      { icon:'🛗', text:'صعدتُ للطابقِ الأخيرِ بـ',         answer:'المِصْعَدِ',   weight:'مِفْعَل' },
+      { icon:'🧮', text:'أحُلُّ مسائلَ الرياضيّاتِ باستخدامِ', answer:'الحَاسِبَةِ', weight:'فَاعِلَة' },
+    ],
+    footer:'وهذهِ الأسماءُ تُسمّى اسمَ الآلةِ 🛠️' },
+
+  /* ⑥+ ربط بالوطن — آلاتٌ تبني وطني (اضغطي ؟ لإظهار اسم الآلة ووزنه) */
+  { type:'homeland', anim:'zoom', strategy:'🇸🇦 ربطٌ بالوطن',
+    title:'آلاتٌ تبني وطني',
+    intro:'في وطني الغالي آلاتٌ تصنعُ الإنجازَ.. ما اسمُ كلِّ آلةٍ؟ 🤔',
+    cards:[
+      { icon:'🛢️', place:'حقولُ النفطِ',        text:'تُحفَرُ آبارُ النفطِ بـ',        answer:'الحَفَّارَةِ', weight:'فَعَّالَة' },
+      { icon:'🌴', place:'مزارعُ القصيمِ',       text:'تُحرَثُ الأرضُ الزراعيّةُ بـ',  answer:'المِحْرَاثِ',  weight:'مِفْعَال' },
+      { icon:'🏗️', place:'المشاريعُ الكبرى',     text:'تُرفَعُ الحجارةُ الثقيلةُ بـ',  answer:'الرَّافِعَةِ', weight:'فَاعِلَة' },
+      { icon:'🌊', place:'محطّاتُ تحليةِ المياهِ', text:'تُضَخُّ المياهُ إلى المدنِ بـ', answer:'المِضَخَّةِ', weight:'مِفْعَلَة' },
+      { icon:'🌙', place:'رصدُ الهلالِ',         text:'يُرصَدُ هلالُ رمضانَ بـ',       answer:'المِنْظَارِ', weight:'مِفْعَال' },
+      { icon:'💻', place:'الخدماتُ الرقميّةُ',    text:'تُنجَزُ المعاملاتُ بـ',          answer:'الحَاسُوبِ',  weight:'فَاعُول' },
+    ],
+    finalBtn:'🇸🇦 رسالةٌ لوطني',
+    final:'بالعلمِ والعملِ نبني وطنَنا.. ونصنعُ *آلاتِ المستقبلِ* مع رؤيةِ ٢٠٣٠ 💚' },
+
+  /* ⑦ أستنتج — التعريف يظهر جزءًا جزءًا */
+  { type:'define', anim:'zoom', strategy:'💡 أستنتجُ',
+    title:'ما اسمُ الآلةِ؟',
+    lead:'من خلالِ الأمثلةِ السابقةِ.. كيف نُعرِّفُ اسمَ الآلةِ؟ 💭',
+    pieces:['اسمُ الآلةِ:','اسمٌ مُشتَقٌّ','منَ الفعلِ الثُّلاثيِّ','للدَّلالةِ على الأداةِ','التي يُؤدّى بها هذا الفعلُ.'],
+    example:'مِثل: فَتَحَ ← مِفْتَاح   •   طَبَعَ ← طَابِعَة   •   نَشَرَ ← مِنْشَار' },
+
+  /* ⑧ أوزان اسم الآلة — بطاقات (الوجه: الوزن، الظهر: مثال) */
+  { type:'flip', anim:'slide', strategy:'🃏 البطاقات التفاعلية', weights:true,
+    title:'أوزانُ اسمِ الآلةِ',
+    intro:'اقرئي الوزنَ.. وتوقّعي مثالًا قبلَ قلبِ البطاقةِ! 🔄',
+    cols:4,
+    cards:[
+      { front:'مِفْعَال',  back:'مِفْتَاح',  backIcon:'🔑' },
+      { front:'مِفْعَل',   back:'مِصْعَد',   backIcon:'🛗' },
+      { front:'مِفْعَلَة', back:'مِلْعَقَة', backIcon:'🥄' },
+      { front:'فَاعِلَة',  back:'طَابِعَة',  backIcon:'🖨️' },
+      { front:'فَعَّال',   back:'كَشَّاف',   backIcon:'🔦' },
+      { front:'فَعَّالَة', back:'ثَلَّاجَة', backIcon:'🧊' },
+      { front:'فَاعُول',   back:'حَاسُوب',   backIcon:'💻' },
+    ] },
+
+  /* ⑨ أنواع اسم الآلة — خريطة ذهنية */
+  { type:'tree', anim:'fade', strategy:'🌳 خريطةٌ ذهنيّة',
+    title:'أنواعُ اسمِ الآلةِ',
+    root:'اسمُ الآلةِ نوعان',
+    branches:[
+      { title:'مُشتَقٌّ 🌱', body:'من حروفِ فعلٍ ثلاثيٍّ،<br>على أوزانٍ يُمكنُ القياسُ عليها', examples:['نَشَرَ ← مِنْشَار','حَصَدَ ← حَصَّادَة'] },
+      { title:'جامِدٌ 🪨', body:'سَماعيٌّ — سُمِعَ عنِ العربِ،<br>ليسَ لهُ فِعلٌ', examples:['سِكِّين','قَلَم','فَأْس','رُمْح'] },
+    ] },
+
+  /* ⑩ العصف الذهني — تكتب المعلمة إجابات الطالبات فتظهر فقاعات */
+  { type:'brainstorm', anim:'zoom', strategy:'🧠 العصف الذهني',
+    title:'عاصفةُ الأدواتِ!',
+    question:'اذكري أكبرَ عددٍ من أسماءِ الآلةِ في:<br>🏠 البيت • 🏫 المدرسة • 🍳 المطبخ',
+    center:'اسمُ<br>الآلةِ',
+    seconds:120,
+    suggestions:['مِلْعَقَة','مِقَصّ','مِكْوَاة','ثَلَّاجَة','غَسَّالَة','مِبْرَاة','مِسْطَرَة','مِرْوَحَة','حَاسُوب','مِشْط','خَلَّاط','مِجْهَر'] },
+
+  /* ⑪ فكّري – زاوجي – شاركي */
+  { type:'tps', anim:'slide', strategy:'👭 فكّري • زاوجي • شاركي',
+    title:'أصوغُ اسمَ الآلةِ',
+    task:'صُوغي اسمَ الآلةِ منَ الأفعالِ الآتيةِ، ثمّ زِنيه:',
+    phases:[
+      { icon:'🤔', name:'فكِّري', desc:'وحدَكِ بهدوء', seconds:60 },
+      { icon:'👭', name:'زاوِجي', desc:'ناقشي زميلتَكِ', seconds:90 },
+      { icon:'📢', name:'شارِكي', desc:'أعلني إجابتَكِ للفصلِ', seconds:60 },
+    ],
+    rows:[
+      { verb:'طَحَنَ', answer:'مِطْحَنَة', weight:'مِفْعَلَة' },
+      { verb:'نَظَرَ', answer:'مِنْظَار',  weight:'مِفْعَال' },
+      { verb:'حَرَثَ', answer:'مِحْرَاث / حَرَّاثَة',  weight:'مِفْعَال / فَعَّالَة' },
+      { verb:'نَشَرَ', answer:'مِنْشَار',  weight:'مِفْعَال' },
+      { verb:'غَسَلَ', answer:'غَسَّالَة', weight:'فَعَّالَة' },
+      { verb:'شَرَطَ', answer:'مِشْرَط',   weight:'مِفْعَل' },
+    ] },
+
+  /* ⑫ سؤال تفاعلي 1 — correct = رقم الإجابة الصحيحة (يبدأ العدّ من 0) */
+  { type:'mcq', anim:'zoom', strategy:'❓ استراتيجية الأسئلة',
+    title:'سؤالٌ سريع',
+    question:'أيُّ الكلماتِ الآتيةِ *اسمُ آلةٍ*؟',
+    options:[
+      { icon:'✍️', text:'كَاتِب' },
+      { icon:'📦', text:'مَكْتُوب' },
+      { icon:'🪚', text:'مِنْشَار' },
+      { icon:'📖', text:'كِتَابَة' },
+    ],
+    correct:2,
+    explain:'(مِنْشَار) أداةٌ ننشرُ بها الخشبَ، على وزنِ *مِفْعَال* 🪚' },
+
+  /* ⑬ لاحظي واكتشفي 2 — اضغطي اسم الآلة داخل الجملة (الكلمة الصحيحة بين [[ ]]) */
+  { type:'extract', anim:'slide', strategy:'🔎 لاحظي واكتشفي',
+    title:'أينَ اسمُ الآلةِ؟',
+    intro:'اضغطي على اسمِ الآلةِ في كلِّ جملةٍ 👆',
+    items:[
+      { text:'نَزَعْتُ [[المَسَامِيرَ]] مِنَ اللُّعْبَةِ.', word:'مِسْمَار', weight:'مِفْعَال' },
+      { text:'اسْتَمَعْتُ إِلَى الأَخْبَارِ مِنَ [[المِذْيَاعِ]].', word:'مِذْيَاع', weight:'مِفْعَال' },
+      { text:'فِي مَعْرِضِ الكِتَابِ [[عَدَّادٌ]] إِلِكْتُرُونِيٌّ يُحْصِي الزُّوَّارَ.', word:'عَدَّاد', weight:'فَعَّال' },
+      { text:'[[القَلَمُ]] رَمْزٌ يَرْفَعُ وَعْيَ المُجْتَمَعِ.', word:'قَلَم', label:'جامِدٌ' },
+    ] },
+
+  /* ⑭ سؤال تفاعلي 2 */
+  { type:'mcq', anim:'zoom', strategy:'🎯 اختاري الإجابة الصحيحة',
+    title:'ما الوزنُ؟',
+    question:'ما وزنُ كلمةِ (مِكْنَسَة)؟ 🧹',
+    options:[
+      { icon:'1️⃣', text:'مِفْعَال' },
+      { icon:'2️⃣', text:'مِفْعَل' },
+      { icon:'3️⃣', text:'مِفْعَلَة' },
+      { icon:'4️⃣', text:'فَاعِلَة' },
+    ],
+    correct:2, weights:true,
+    explain:'مِكْنَسَة ← *مِفْعَلَة* مثل: مِلْعَقَة، مِسْطَرَة' },
+
+  /* ⑮ صح أم خطأ — answer: true = صح ، false = خطأ */
+  { type:'tf', anim:'fade', strategy:'✅ صح أم خطأ؟',
+    title:'صح ✔ أم خطأ ✖ ؟',
+    items:[
+      { text:'اسمُ الآلةِ مُشتَقٌّ منَ الفعلِ الثلاثيِّ للدّلالةِ على الأداةِ.', answer:true,  explain:'صحيح ✔ هذا تعريفُ اسمِ الآلةِ.' },
+      { text:'كلمةُ (فَاتِح) اسمُ آلةٍ.',                                   answer:false, explain:'خطأ ✖ (فَاتِح) اسمُ فاعلٍ على وزنِ فَاعِل.' },
+      { text:'كلمةُ (سِكِّين) اسمُ آلةٍ جامِدٌ.',                              answer:true,  explain:'صحيح ✔ سَماعيّةٌ ليسَ لها فعلٌ.' },
+      { text:'كلمةُ (ثَلَّاجَة) على وزنِ (مِفْعَال).',                          answer:false, explain:'خطأ ✖ بل على وزنِ (فَعَّالَة).' },
+    ] },
+
+  /* ⑯ ماذا تتوقعين؟ كلمة واحدة بمعنيين (من تدريبات الكتاب) */
+  { type:'twoMeanings', anim:'zoom', strategy:'🔮 ماذا تتوقّعين؟',
+    title:'كلمةٌ واحدةٌ.. ومعنيان!',
+    word:'رَافِعَة', weightNote:'على وزنِ: فَاعِلَة',
+    prompt:'توقّعي: هل (رافعة) اسمُ آلةٍ أم اسمُ فاعلٍ في كلِّ جملة؟',
+    choices:[ { key:'tool', label:'🛠️ اسمُ آلةٍ' }, { key:'agent', label:'🙋‍♀️ اسمُ فاعلٍ' } ],
+    cards:[
+      { sentence:'رَفَعَتِ *الرَّافِعَةُ* الحِجَارَةَ الثَّقِيلَةَ. 🏗️', correct:'tool',  why:'لأنّها أداةٌ يُرفَعُ بها' },
+      { sentence:'الطَّالِبَةُ *رَافِعَةٌ* يَدَهَا لِتُجِيبَ. 🙋‍♀️',   correct:'agent', why:'لأنّها هي مَن قامت بالفعلِ' },
+    ],
+    conclusion:'💡 السِّياقُ هو الذي يُحدِّدُ نوعَ الكلمةِ!' },
+
+  /* ⑰ سؤال تفاعلي 3 */
+  { type:'mcq', anim:'zoom', strategy:'❓ استراتيجية الأسئلة',
+    title:'أصوغُ بنفسي',
+    question:'اسمُ الآلةِ منَ الفعلِ (ثَقَبَ) هو:',
+    options:[
+      { icon:'🧍‍♀️', text:'ثَاقِب' },
+      { icon:'🕳️', text:'مَثْقُوب' },
+      { icon:'🔩', text:'مِثْقَب' },
+      { icon:'📝', text:'ثَقْب' },
+    ],
+    correct:2,
+    explain:'مِثْقَب: أداةٌ نثقُبُ بها، على وزنِ *مِفْعَل* 🔩' },
+
+  /* ⑱ تحدّي الدقيقة — صنّفي الكلمات بسرعة
+       c: رقم الفئة (0 = آلة، 1 = فاعل، 2 = مفعول) */
+  { type:'challenge', anim:'zoom', strategy:'⏱️ تحدّي الدقيقة',
+    title:'تحدّي الدقيقةِ الواحدةِ!',
+    description:'صنّفي أكبرَ عددٍ منَ الكلماتِ خلالَ *دقيقةٍ واحدةٍ*:<br>اسمُ آلةٍ؟ اسمُ فاعلٍ؟ أم اسمُ مفعولٍ؟',
+    seconds:60,
+    categories:[ { icon:'🛠️', label:'اسمُ آلةٍ' }, { icon:'🙋‍♀️', label:'اسمُ فاعلٍ' }, { icon:'📦', label:'اسمُ مفعولٍ' } ],
+    words:[
+      { w:'مِفْتَاح', c:0 }, { w:'كَاتِب', c:1 },  { w:'مَكْسُور', c:2 }, { w:'مِكْنَسَة', c:0 },
+      { w:'لَاعِب', c:1 },  { w:'مَشْرُوب', c:2 }, { w:'مِنْظَار', c:0 },  { w:'حَاسُوب', c:0 },
+      { w:'نَاجِح', c:1 },  { w:'مَفْتُوح', c:2 }, { w:'مِصْعَد', c:0 },  { w:'سَامِع', c:1 },
+    ] },
+
+  /* ⑲ التعلم التعاوني (أتعلّم وأتسلّى) + لوحة نقاط المجموعات */
+  { type:'groups', anim:'slide', strategy:'🤝 التعلّم التعاوني',
+    title:'أتعلّمُ وأتسلّى',
+    task:'📚 قاموسٌ مُصوَّرٌ لأسماءِ الآلةِ',
+    steps:[
+      'ارسمي (أو الصقي) صورةَ آلةٍ نستخدمُها.',
+      'اكتبي اسمَ الآلةِ تحتَ الصورةِ.',
+      'زِنيه بالميزانِ الصرفيِّ، وحدّدي نوعَه.',
+    ],
+    roles:['🎨 الرسّامة','✍️ الكاتبة','⚖️ الوزّانة','📢 المتحدّثة'],
+    seconds:300,
+    groups:['🌸 مجموعةُ الإبداعِ','⭐ مجموعةُ التميّزِ','🌈 مجموعةُ الأملِ','💡 مجموعةُ النّورِ'] },
+
+  /* ⑳ مراجعة (بطاقات تذكُّر) */
+  { type:'flip', anim:'fade', strategy:'🔁 مراجعة',
+    title:'خُلاصةُ الدَّرسِ',
+    intro:'حاولي الإجابةَ قبلَ أن تقلبي البطاقةَ 💭',
+    cols:3,
+    cards:[
+      { icon:'📖', front:'ما اسمُ الآلةِ؟',   back:'اسمٌ مُشتقٌّ يدلُّ على *الأداةِ* التي يُؤدّى بها الفعلُ' },
+      { icon:'⚖️', front:'اذكري ثلاثةَ أوزانٍ', back:'مِفْعَال • مِفْعَل • مِفْعَلَة<br>فَاعِلَة • فَعَّال • فَعَّالَة • فَاعُول' },
+      { icon:'🌳', front:'ما نوعاه؟',          back:'مُشتقٌّ (مِنْشَار)<br>جامِدٌ (سِكِّين)' },
+      { icon:'🔍', front:'كيف أميّزُه؟',        back:'أسألُ: هل الكلمةُ *أداةٌ* نستخدمُها لأداءِ فعلٍ؟' },
+      { icon:'✨', front:'اذكري ثلاثةَ أمثلةٍ', back:'مِفْتَاح • مِكْنَسَة • حَاسُوب' },
+    ] },
+
+  /* ㉑ التقييم الفوري */
+  { type:'mcq', anim:'zoom', strategy:'⚡ التقييم الفوري',
+    title:'سؤالُ الخروجِ',
+    question:'في أيِّ جملةٍ جاءَ اسمُ الآلةِ *جامِدًا*؟',
+    options:[
+      { icon:'🔪', text:'قطعتُ الخبزَ بالسِّكّينِ.' },
+      { icon:'🔑', text:'فتحتُ البابَ بالمِفتاحِ.' },
+      { icon:'🧹', text:'كنستُ الغرفةَ بالمِكنسةِ.' },
+      { icon:'🧮', text:'حسبتُ بالحاسبةِ.' },
+    ],
+    correct:0,
+    explain:'(سِكِّين) سَماعيّةٌ ليس لها فعلٌ، فهي *اسمُ آلةٍ جامِدٌ*' },
+
+  /* ㉒ تقييم ذاتي + الواجب المنزلي */
+  { type:'exit', anim:'slide', strategy:'🪞 تقييمٌ ذاتيّ',
+    title:'كيفَ كانَ درسُنا؟',
+    question:'قيّمي فهمَكِ لدرسِ اليومِ:',
+    options:[ { e:'😍', l:'فهمتُ تمامًا' }, { e:'🙂', l:'فهمتُ أغلبَه' }, { e:'🤔', l:'أحتاجُ مساعدةً' } ],
+    homeworkTitle:'🏠 الواجبُ المنزليُّ',
+    homework:[
+      'اكتبي أكبرَ عددٍ من أسماءِ الآلةِ التي نستخدمُها في حياتِنا.',
+      'ابحثي في المعجمِ عن معنى: (مِنْجَل، مِبْرَد، مِبْضَع)، وركّبي كلًّا منها في جملةٍ مفيدةٍ.',
+    ] },
+
+  /* ㉓ شريحة ختامية تحفيزية */
+  { type:'closing', anim:'zoom',
+    emoji:'🌟',
+    title:'أنتُنَّ رائعات!',
+    message:'اليومَ تعلّمنا أنّ لكلِّ أداةٍ اسمًا جميلًا يحكي قصّةَ فعلِها.. فكوني دائمًا *مِفتاحًا* للخيرِ، *ومِصباحًا* للعلمِ 💜',
+    quote:'العلمُ نورٌ.. وأنتُنَّ نجماتُه ✨',
+    clapBtn:'👏 صفّقنَ لأنفسِكنّ' },
+];
+/* ═══════════════════ نهاية الإعدادات — لا حاجة لتعديل ما بعدها ═══════════════════ */
+
+
+/* =====================================================================
+   أدوات مساعدة
+   ===================================================================== */
+document.title = LESSON.title;
+const $ = (s, r = document) => r.querySelector(s);
+
+/** إنشاء عنصر: h('div', {class:'x', onclick:fn}, ...children) */
+function h(tag, attrs, ...kids) {
+  const el = document.createElement(tag);
+  for (const [k, v] of Object.entries(attrs || {})) {
+    if (v == null || v === false) continue;
+    if (k === 'class') el.className = v;
+    else if (k === 'style') el.style.cssText = v;
+    else if (k === 'html') el.innerHTML = v;
+    else if (k.startsWith('on')) el.addEventListener(k.slice(2), v);
+    else el.setAttribute(k, v === true ? '' : v);
+  }
+  for (const c of kids.flat(Infinity)) {
+    if (c == null || c === false) continue;
+    el.append(c instanceof Node ? c : String(c));
+  }
+  return el;
+}
+/** نص غني: يسمح بـ HTML بسيط و *تظليل* */
+const fmtRich = s => String(s ?? '').replace(/\*(.+?)\*/g, '<mark>$1</mark>');
+const rich = (s, tag = 'span', cls) => h(tag, { class: cls, html: fmtRich(s) });
+/** تلوين حروف الميزان ف ع ل داخل الوزن */
+const colorRoot = s => String(s).replace(/([فعل])([ً-ٰٟ]*)/g, '<span class="rc">$1$2</span>');
+/** الأرقام العربية */
+const ar = n => String(n).replace(/\d/g, d => '٠١٢٣٤٥٦٧٨٩'[d]);
+const fmtTime = sec => ar(Math.floor(sec / 60)) + ':' + ar(String(sec % 60).padStart(2, '0'));
+const shuffle = a => { for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+const center = el => { const r = el.getBoundingClientRect(); return [r.left + r.width / 2, r.top + r.height / 2]; };
+
+
+/* =====================================================================
+   الأصوات — Web Audio API (بدون أي ملفات خارجية)
+   ===================================================================== */
+const sfx = (() => {
+  let ctx = null, master = null, noiseBuf = null;
+  const ac = () => {
+    if (!ctx) {
+      ctx = new (window.AudioContext || window.webkitAudioContext)();
+      master = ctx.createGain(); master.gain.value = LESSON.volume; master.connect(ctx.destination);
+    }
+    if (ctx.state === 'suspended') ctx.resume();
+    return ctx;
+  };
+  const noise = () => {
+    if (!noiseBuf) {
+      const c = ac(); noiseBuf = c.createBuffer(1, c.sampleRate * 0.4, c.sampleRate);
+      const d = noiseBuf.getChannelData(0); for (let i = 0; i < d.length; i++) d[i] = Math.random() * 2 - 1;
+    }
+    return noiseBuf;
+  };
+  // نغمة واحدة بغلاف ناعم
+  const tone = (f, t, dur, type = 'sine', vol = .3, f2) => {
+    const c = ac(), o = c.createOscillator(), g = c.createGain();
+    o.type = type; o.frequency.setValueAtTime(f, t);
+    if (f2) o.frequency.exponentialRampToValueAtTime(f2, t + dur * .8);
+    g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(vol, t + .015);
+    g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+    o.connect(g).connect(master); o.start(t); o.stop(t + dur + .05);
+  };
+  // صفقة واحدة = نبضة ضوضاء مُرشَّحة
+  const clapOnce = (t, vol) => {
+    const c = ac(), src = c.createBufferSource(), bp = c.createBiquadFilter(), hp = c.createBiquadFilter(), g = c.createGain();
+    src.buffer = noise();
+    bp.type = 'bandpass'; bp.frequency.value = 900 + Math.random() * 1500; bp.Q.value = .9;
+    hp.type = 'highpass'; hp.frequency.value = 450;
+    g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(vol, t + .004);
+    g.gain.exponentialRampToValueAtTime(0.0001, t + .08 + Math.random() * .06);
+    src.connect(bp).connect(hp).connect(g).connect(master);
+    src.start(t, Math.random() * .2, .18);
+  };
+  return {
+    unlock: ac,
+    /** تصفيق جماعي قصير (~2 ثانية) */
+    applause(dur = 2) {
+      const now = ac().currentTime + .02;
+      for (let p = 0; p < 8; p++) {                      // 8 "طالبات" يصفّقن
+        let t = now + Math.random() * .15;
+        const rate = .11 + Math.random() * .07;
+        while (t < now + dur) {
+          const fade = Math.max(.08, 1 - Math.pow((t - now) / dur, 2));
+          clapOnce(t, (.25 + Math.random() * .45) * fade);
+          t += rate * (.85 + Math.random() * .3);
+        }
+      }
+    },
+    success() { const n = ac().currentTime; [523.25, 659.25, 783.99, 1046.5].forEach((f, i) => tone(f, n + i * .09, .45, 'triangle', .3)); tone(2093, n + .38, .6, 'sine', .08); },
+    ding()    { const n = ac().currentTime; tone(880, n, .25, 'triangle', .25); tone(1318.5, n + .08, .35, 'triangle', .22); },
+    wrong()   { const n = ac().currentTime; tone(392, n, .2, 'sine', .25); tone(311, n + .17, .35, 'sine', .25); },
+    pop()     { tone(520, ac().currentTime, .12, 'sine', .18, 900); },
+    flip()    { tone(380, ac().currentTime, .16, 'triangle', .1, 760); },
+    tick()    { tone(1200, ac().currentTime, .06, 'square', .05); },
+    bell()    { const n = ac().currentTime; [0, .45].forEach(d => { tone(880, n + d, 1.1, 'sine', .3); tone(1760, n + d, .7, 'sine', .08); }); },
+  };
+})();
+
+
+/* =====================================================================
+   المؤثرات البصرية: تصفيق 👏 + قصاصات احتفالية
+   ===================================================================== */
+const fx = $('#fx');
+let scale = 1;
+
+function clapBurst() {
+  const W = innerWidth, H = innerHeight;
+  for (let i = 0; i < 18; i++) {
+    const e = h('div', { class: 'fly' }, '👏');
+    const size = (42 + Math.random() * 46) * scale;
+    e.style.fontSize = size + 'px';
+    e.style.left = (W * (.12 + Math.random() * .76) - size / 2) + 'px';
+    e.style.top = (H - 40 * scale) + 'px';
+    fx.append(e);
+    const dx = (Math.random() - .5) * 220 * scale, dy = -H * (.45 + Math.random() * .4), rot = (Math.random() - .5) * 50;
+    e.animate([
+      { transform: 'translate(0,0) scale(.4)', opacity: 0 },
+      { transform: `translate(${dx * .3}px,${dy * .25}px) scale(1)`, opacity: 1, offset: .2 },
+      { transform: `translate(${dx}px,${dy}px) scale(.85) rotate(${rot}deg)`, opacity: 0 },
+    ], { duration: 1700 + Math.random() * 900, delay: Math.random() * 450, easing: 'cubic-bezier(.2,.6,.3,1)', fill: 'both' })
+      .onfinish = () => e.remove();
+  }
+  // تصفيقة كبيرة في المنتصف تختفي بلطف
+  const big = h('div', { class: 'fly' }, '👏');
+  big.style.cssText = `font-size:${220 * scale}px;left:${W / 2 - 110 * scale}px;top:${H / 2 - 130 * scale}px`;
+  fx.append(big);
+  big.animate([{ transform: 'scale(.3)', opacity: 0 }, { transform: 'scale(1.1)', opacity: .95, offset: .35 }, { transform: 'scale(1.3)', opacity: 0 }],
+    { duration: 1200, easing: 'ease-out' }).onfinish = () => big.remove();
+}
+
+function confetti(x = innerWidth / 2, y = innerHeight / 2, n = 90) {
+  const colors = ['#9a7fd6', '#6a45a8', '#f2cb45', '#fbe59a', '#ffffff', '#e8a6d6', '#7fd1b0'];
+  for (let i = 0; i < n; i++) {
+    const p = h('div', { class: 'conf' }), w = (8 + Math.random() * 10) * scale;
+    p.style.cssText = `width:${w}px;height:${w * (.4 + Math.random() * .9)}px;left:${x}px;top:${y}px;` +
+      `background:${colors[i % colors.length]};border-radius:${Math.random() < .4 ? '50%' : '2px'};box-shadow:0 0 0 1px rgba(0,0,0,.04)`;
+    fx.append(p);
+    const a = Math.random() * Math.PI * 2, v = (220 + Math.random() * 480) * scale;
+    const dx = Math.cos(a) * v, dy = Math.sin(a) * v - 260 * scale, fall = (450 + Math.random() * 450) * scale, r = Math.random() * 720 - 360;
+    p.animate([
+      { transform: 'translate(0,0) rotate(0)', opacity: 1 },
+      { transform: `translate(${dx}px,${dy}px) rotate(${r}deg)`, opacity: 1, offset: .45 },
+      { transform: `translate(${dx * 1.15}px,${dy + fall}px) rotate(${r * 2}deg)`, opacity: 0 },
+    ], { duration: 1700 + Math.random() * 900, easing: 'cubic-bezier(.12,.7,.3,1)' }).onfinish = () => p.remove();
+  }
+}
+/** احتفال عند الإجابة الصحيحة: صوت نجاح + قصاصات من موضع العنصر */
+function celebrate(el, n = 70) { sfx.success(); const [x, y] = el ? center(el) : [innerWidth / 2, innerHeight / 2]; confetti(x, y, n); }
+
+/** التصفيق: يعمل فقط بالزر أو بحرف (ت) */
+function clap() {
+  sfx.applause(); clapBurst();
+  const b = $('#cClap'); b.classList.remove('pulse'); void b.offsetWidth; b.classList.add('pulse');
+}
+
+/** رسالة صحيحة/خاطئة */
+function say(box, ok, text) {
+  box.replaceChildren(h('span', { class: 'msg pop ' + (ok ? 'ok' : 'bad') }, text ?? (ok ? LESSON.correctMsg : LESSON.wrongMsg)));
+}
+function shakeEl(el) { el.classList.remove('shake'); void el.offsetWidth; el.classList.add('shake'); }
+
+
+/* =====================================================================
+   مؤقّت دائري قابل لإعادة الاستخدام
+   ===================================================================== */
+function Timer(seconds) {
+  let total = seconds, left = seconds, id = null;
+  const C = 2 * Math.PI * 64;
+  const el = h('div', { class: 'timer' });
+  el.innerHTML = `<div class="t-ring"><svg viewBox="0 0 150 150"><circle class="t-track" cx="75" cy="75" r="64"/>
+    <circle class="t-bar" cx="75" cy="75" r="64" stroke-dasharray="${C.toFixed(2)}"/></svg><div class="t-num"></div></div>
+    <div class="t-btns"><button type="button" class="icon-btn t-play" title="تشغيل / إيقاف">▶</button>
+    <button type="button" class="icon-btn t-reset" title="إعادة المؤقت">↺</button></div>`;
+  const num = $('.t-num', el), bar = $('.t-bar', el), play = $('.t-play', el);
+  const draw = () => {
+    num.textContent = left > 0 ? fmtTime(left) : '⏰';
+    bar.style.strokeDashoffset = C * (1 - left / total);
+    el.classList.toggle('low', left > 0 && left <= 10);
+    play.textContent = id ? '⏸' : '▶';
+  };
+  const stop = () => { clearInterval(id); id = null; draw(); };
+  const reset = () => { clearInterval(id); id = null; left = total; el.classList.remove('done', 'low'); draw(); };
+  const tick = () => {
+    if (!el.isConnected) { clearInterval(id); id = null; return; }
+    left--;
+    if (left <= 0) { left = 0; stop(); el.classList.add('done'); sfx.bell(); }
+    else { if (left <= 5) sfx.tick(); draw(); }
+  };
+  const start = () => { if (id) return; if (left <= 0) reset(); el.classList.remove('done'); id = setInterval(tick, 1000); draw(); };
+  play.onclick = () => (id ? stop() : start());
+  $('.t-reset', el).onclick = reset;
+  draw();
+  return { el, start, stop, reset, set(sec) { total = left = sec; reset(); } };
+}
+
+
+/* =====================================================================
+   رأس الشريحة (العنوان + شارة الاستراتيجية + زر الإعادة)
+   ===================================================================== */
+function head(s, resettable = true) {
+  return h('header', { class: 's-head rv' },
+    rich(s.title, 'h2', 's-title'),
+    h('div', { class: 'head-tools' },
+      s.strategy ? h('span', { class: 'badge' }, s.strategy) : null,
+      resettable ? h('button', { type: 'button', class: 'icon-btn reset', title: 'إعادة الشريحة لحالتها الأولى',
+        onclick: e => buildSlide(+e.currentTarget.closest('.slide').dataset.i) }, '↺') : null));
+}
+
+
+/* =====================================================================
+   رسّامو الشرائح — كل نوع له دالة تبني محتواه من الإعدادات
+   ===================================================================== */
+const R = {};
+
+/** تاريخ اليوم: اليوم + التاريخ الهجري (أم القرى) + الميلادي */
+function todayAr() {
+  const now = new Date();
+  try {
+    const day = new Intl.DateTimeFormat('ar-SA', { weekday: 'long' }).format(now);
+    const hijri = new Intl.DateTimeFormat('ar-SA-u-ca-islamic-umalqura-nu-arab', { day: 'numeric', month: 'long', year: 'numeric' }).format(now);
+    const greg = new Intl.DateTimeFormat('ar-SA-u-ca-gregory-nu-arab', { day: 'numeric', month: 'long', year: 'numeric' }).format(now);
+    return `${day} ${hijri.replace(/\s*هـ$/, '')}هـ — ${greg.replace(/\s*م$/, '')}م`;
+  } catch (e) { return now.toLocaleDateString(); }
+}
+
+/* ① الغلاف */
+R.cover = s => {
+  const spots = [[1420, 120], [1500, 600], [300, 150], [180, 470]];
+  return [
+    h('div', { class: 'cover' },
+      h('div', { class: 'cover-pill rv' }, s.pill),
+      rich(s.greeting, 'p', 'cover-greet rv'),
+      rich(s.title, 'h1', 'cover-title rv'),
+      rich(s.subtitle, 'p', 'cover-sub rv'),
+      h('div', { class: 'cover-meta rv' }, s.meta.replace('{date}', todayAr()))),
+    // صورة الكتب من الثيم (تختفي تلقائيًا إن لم توجد)
+    h('div', { class: 'cover-books rv' }, h('img', { src: 'theme4.jpg', alt: '', onerror: e => e.target.parentNode.remove() })),
+    (s.floaties || []).map((f, i) => h('div', { class: 'floaty', style: `left:${spots[i % 4][0]}px;top:${spots[i % 4][1]}px;animation-delay:${i * .8}s` }, f)),
+  ];
+};
+
+/* ② ⑧ ⑳ بطاقات مقلوبة */
+R.flip = s => {
+  const n = s.cards.length, cols = s.cols || Math.min(n, 4), rows = Math.ceil(n / cols);
+  return [head(s),
+    s.intro ? rich(s.intro, 'p', 'intro rv') : null,
+    h('div', { class: 'flip-grid', style: `--cols:${cols};--rows:${rows}` },
+      s.cards.map(c => h('div', { class: 'flip rv' + (s.weights ? ' weights' : ''),
+        onclick: e => { e.currentTarget.classList.toggle('flipped'); sfx.flip(); } },
+        h('div', { class: 'flip-in' },
+          h('div', { class: 'face front' },
+            c.icon ? h('div', { class: 'f-ico' }, c.icon) : null,
+            h('div', { class: 'f-txt', html: s.weights ? colorRoot(c.front) : fmtRich(c.front) }),
+            h('div', { class: 'tap' }, 'اضغطي للقلب 🔄')),
+          h('div', { class: 'face back' },
+            c.backIcon ? h('div', { class: 'b-ico' }, c.backIcon) : null,
+            rich(c.back, 'div', 'b-txt')))))),
+  ];
+};
+
+/* ② شريط الذكريات — مراجعة الدرس السابق */
+R.memories = s => {
+  const count = h('span', { class: 'count-pill' });
+  let revealed = 0;
+  const total = s.frames.length;
+  const drawCount = () => { count.textContent = `🎞️ ${ar(revealed)} من ${ar(total)} ذكريات`; };
+  const develop = (fr) => {
+    if (fr.classList.contains('dev')) return false;
+    fr.classList.add('dev'); revealed++; drawCount();
+    frames.forEach(f => f.classList.remove('current')); fr.classList.add('current');
+    return true;
+  };
+  const frames = s.frames.map((f, i) => {
+    const fr = h('div', { class: 'mframe rv', style: `--tilt:${i % 2 ? 1.2 : -1.2}deg` },
+      h('span', { class: 'mf-num' }, (f.icon || '📸') + ' ذكرى ' + ar(i + 1)));
+    if (f.quiz) {
+      // إطار تفاعلي: سؤال سريع بخيارين
+      const fb = h('div', { class: 'mf-fb' });
+      let done = false;
+      fr.classList.add('quiz');
+      fr.append(h('div', { class: 'mf-q' }, 'كلمةُ:'), h('div', { class: 'mf-word' }, f.quiz.word),
+        h('div', { class: 'mf-choices' }, f.quiz.choices.map((c, k) => h('button', { type: 'button', class: 'opt', onclick: e => {
+          const b = e.currentTarget; if (done || b.classList.contains('wrong')) return;
+          if (k === f.quiz.correct) { done = true; b.classList.add('correct'); develop(fr); fb.textContent = LESSON.correctMsg; fb.className = 'mf-fb ok pop'; celebrate(b, 60); }
+          else { b.classList.add('wrong'); shakeEl(b); sfx.wrong(); fb.textContent = LESSON.wrongMsg; fb.className = 'mf-fb bad pop'; }
+        } }, c))), fb);
+    } else {
+      fr.append(rich(f.q, 'div', 'mf-q'),
+        h('div', { class: 'mf-hint' }, '📸 اضغطي لاستعادةِ الذكرى'),
+        h('div', { class: 'mf-a' }, rich(f.a, 'div'), f.ex ? rich(f.ex, 'div', 'mf-ex') : null));
+      fr.addEventListener('click', () => { if (develop(fr)) sfx.flip(); });
+    }
+    return fr;
+  });
+  // زر الذكرى التالية: يكشف أول إطار لم يُكشف بالترتيب
+  const nextBtn = h('button', { type: 'button', class: 'btn', onclick: () => {
+    const f = frames.find(x => !x.classList.contains('dev'));
+    if (!f) return;
+    if (f.classList.contains('quiz')) { frames.forEach(x => x.classList.remove('current')); f.classList.add('current'); sfx.pop(); }
+    else if (develop(f)) sfx.flip();
+  } }, s.nextBtn || '🎬 الذكرى التالية');
+  drawCount();
+  return [head(s),
+    s.intro ? rich(s.intro, 'p', 'intro rv') : null,
+    h('div', { class: 'strip rv' }, frames),
+    h('div', { class: 'btn-row rv', style: 'margin-top:20px' }, count, nextBtn)];
+};
+
+/* ③ الأهداف */
+R.goals = s => [head(s),
+  h('div', { class: 'goals' },
+    s.goals.map((g, i) => h('div', { class: 'goal card rv',
+      onclick: e => { const el = e.currentTarget; el.classList.toggle('done'); if (el.classList.contains('done')) sfx.ding(); } },
+      h('div', { class: 'g-num' }, ar(i + 1)),
+      h('div', { class: 'g-ico', style: `animation-delay:${i * .6}s` }, g.icon),
+      rich(g.text, 'div', 'g-txt')))),
+];
+
+/* ④ الألغاز — ماذا تتوقعين؟ */
+R.riddles = s => {
+  const final = h('div', { class: 'final rv' });
+  const showFinal = () => { final.replaceChildren(rich(s.final, 'div', 'final-box card pop')); celebrate(final, 60); };
+  final.append(h('button', { type: 'button', class: 'btn yellow', onclick: showFinal }, s.finalBtn));
+  return [head(s),
+    h('div', { class: 'riddles' },
+      s.riddles.map(r => {
+        const q = h('div', { class: 'r-q' }, '؟'), ans = h('div', { class: 'r-ans' }), verb = h('div', { class: 'r-verb' });
+        return h('div', { class: 'riddle card rv', onclick: e => {
+          const card = e.currentTarget; if (card.classList.contains('open')) return;
+          card.classList.add('open'); q.textContent = r.icon; ans.textContent = r.answer; verb.textContent = r.verb;
+          ans.classList.add('pop'); sfx.ding();
+        } }, rich(r.clue, 'div', 'r-clue'), q, ans, verb);
+      })),
+    final];
+};
+
+/* ⑤ القصة — لاحظي واكتشفي */
+R.story = s => {
+  const parts = s.text.split(/(\[\[.+?\]\])/g);
+  const total = parts.filter(p => p.startsWith('[[')).length;
+  let found = 0;
+  const count = h('span', { class: 'count-pill' });
+  const disc = h('div', { class: 'disc' }, rich(s.task, 'span', 'chip'));
+  const note = h('div', { class: 'note card' },
+    h('button', { type: 'button', class: 'icon-btn x', title: 'إغلاق', onclick: () => note.classList.remove('show') }, '✕'),
+    rich(s.note));
+  const drawCount = () => { count.textContent = `🔍 ${ar(found)} من ${ar(total)}`; };
+  const para = h('p');
+  parts.forEach(p => {
+    const m = p.match(/^\[\[(.+?)\]\]$/);
+    if (!m) { para.append(p); return; }
+    const [word, verb, icon] = m[1].split('|');
+    para.append(h('span', { class: 'tw', onclick: e => {
+      const el = e.currentTarget; if (el.classList.contains('found')) return;
+      el.classList.add('found'); found++; drawCount();
+      if (found === 1) disc.replaceChildren();
+      disc.append(h('span', { class: 'chip pop' }, `${icon || '🛠️'} ${word.replace(/^(بِ|بـ|ب)/, '')} ← ${verb}`));
+      if (found === total) { celebrate(el, 80); setTimeout(() => note.classList.add('show'), 900); } else sfx.ding();
+    } }, word));
+  });
+  const story = h('div', { class: 'story card rv' }, para);
+  drawCount();
+  return [head(s), story,
+    h('div', { class: 'story-bar rv' }, count, disc,
+      h('button', { type: 'button', class: 'btn soft', onclick: () => story.classList.toggle('hint') }, '💡 تلميح'),
+      h('button', { type: 'button', class: 'btn', onclick: () => { note.classList.add('show'); sfx.pop(); } }, '✨ ماذا لاحظتِ؟')),
+    note];
+};
+
+/* ⑥ أكملي الجملة — إظهار تدريجي */
+R.fill = s => {
+  const foot = rich(s.footer, 'div', 'foot-txt');
+  const reveal = (row) => {
+    const b = $('.blank', row); if (b.classList.contains('open')) return false;
+    b.classList.add('open'); b.textContent = b.dataset.a;
+    setTimeout(() => $('.wchip', row).classList.add('show'), 350);
+    return true;
+  };
+  const rows = s.rows.map(r => h('div', { class: 'fill-row card rv' },
+    h('span', { class: 'fr-ico' }, r.icon),
+    rich(r.text, 'span', 'fr-txt'),
+    h('button', { type: 'button', class: 'blank', 'data-a': r.answer, onclick: e => { if (reveal(e.currentTarget.parentNode)) sfx.ding(); } }, '؟'),
+    h('span', { class: 'wchip', html: 'على وزنِ: ' + colorRoot(r.weight) })));
+  return [head(s),
+    h('div', { class: 'fill-list' }, rows),
+    h('div', { class: 'fill-foot rv' }, foot,
+      h('button', { type: 'button', class: 'btn soft', onclick: () => { rows.forEach(reveal); sfx.pop(); } }, '👁️ أظهري الكلَّ'),
+      h('button', { type: 'button', class: 'btn yellow', onclick: e => { foot.classList.add('show'); e.currentTarget.remove(); celebrate(foot, 50); } }, '💡 ماذا تُسمّى؟'))];
+};
+
+/* ⑥+ ربط بالوطن — بطاقات تُكشف إجابتها بالضغط */
+R.homeland = s => {
+  const final = h('div', { class: 'final hl-final rv' });
+  final.append(h('button', { type: 'button', class: 'btn', onclick: () => {
+    final.replaceChildren(rich(s.final, 'div', 'final-box card pop')); celebrate(final, 70);
+  } }, s.finalBtn));
+  return [head(s),
+    s.intro ? rich(s.intro, 'p', 'intro rv') : null,
+    h('div', { class: 'hl-grid' },
+      s.cards.map(c => {
+        const wch = h('div', { class: 'wchip', html: 'على وزنِ: ' + colorRoot(c.weight) });
+        return h('div', { class: 'hl-card card rv' },
+          h('div', { class: 'hl-place' }, c.icon + ' ' + c.place),
+          rich(c.text, 'div', 'hl-txt'),
+          h('div', { class: 'hl-ans' },
+            h('button', { type: 'button', class: 'blank', onclick: e => {
+              const b = e.currentTarget; if (b.classList.contains('open')) return;
+              b.classList.add('open'); b.textContent = c.answer; sfx.ding();
+              setTimeout(() => wch.classList.add('show'), 350);
+            } }, '؟'),
+            wch));
+      })),
+    final];
+};
+
+/* ⑦ التعريف التدريجي */
+R.define = s => {
+  let shown = 0;
+  const pieces = s.pieces.map(p => rich(p, 'span', 'piece hide'));
+  const ex = rich(s.example, 'div', 'def-ex');
+  const btn = h('button', { type: 'button', class: 'btn', onclick: () => next() }, 'أظهري الجزءَ التالي ✨');
+  function next() {
+    if (shown >= pieces.length) return;
+    const p = pieces[shown++]; p.classList.remove('hide'); p.classList.add('shown'); sfx.pop();
+    if (shown === pieces.length) { btn.remove(); ex.classList.add('show'); celebrate($('.def-box', ex.parentNode) || ex, 60); }
+  }
+  return [head(s),
+    h('div', { class: 'body' },
+      rich(s.lead, 'p', 'def-lead rv'),
+      h('div', { class: 'def-box card rv', onclick: next }, pieces),
+      ex,
+      h('div', { class: 'btn-row rv' }, btn))];
+};
+
+/* ⑨ الشجرة */
+R.tree = s => [head(s),
+  h('div', { class: 'tree' },
+    rich(s.root, 'div', 't-root rv'),
+    h('div', { class: 't-stem rv' }),
+    h('div', { class: 't-conn rv' }),
+    h('div', { class: 't-branches' },
+      s.branches.map(b => h('div', { class: 't-br rv' },
+        h('button', { type: 'button', class: 't-head', onclick: e => {
+          const br = e.currentTarget.parentNode; if (!br.classList.contains('open')) { br.classList.add('open'); sfx.ding(); }
+        } }, rich(b.title), h('small', {}, 'اضغطي للاكتشاف 👆')),
+        h('div', { class: 't-content card' },
+          rich(b.body, 'div'),
+          h('div', { class: 'ex-chips' }, b.examples.map(x => h('span', { class: 'ex' }, x)))))))),
+];
+
+/* ⑩ العصف الذهني */
+R.brainstorm = s => {
+  const cloud = h('div', { class: 'bs-cloud rv' }, rich(s.center, 'div', 'bs-center'));
+  const count = h('div', { class: 'bs-count' });
+  const sugg = [...s.suggestions];
+  const words = () => cloud.querySelectorAll('.bubble').length;
+  const drawCount = () => { count.textContent = `💡 عددُ الأفكارِ: ${ar(words())}`; };
+
+  // يضع الفقاعة في مكان فارغ داخل السحابة دون تداخل
+  const place = (b) => {
+    const W = cloud.clientWidth, H = cloud.clientHeight, w = b.offsetWidth, hh = b.offsetHeight, pad = 14;
+    const others = [...cloud.querySelectorAll('.bubble')].filter(x => x !== b)
+      .map(x => ({ x: parseFloat(x.style.left), y: parseFloat(x.style.top), w: x.offsetWidth, h: x.offsetHeight }));
+    const overlap = (x, y) => {
+      let o = 0;
+      const cx = Math.max(0, (w / 2 + 125 + pad) - Math.abs(x - W / 2)), cy = Math.max(0, (hh / 2 + 125 + pad) - Math.abs(y - H / 2));
+      o += cx * cy;
+      for (const r of others) {
+        const ox = Math.max(0, (w + r.w) / 2 + pad - Math.abs(x - r.x)), oy = Math.max(0, (hh + r.h) / 2 + pad - Math.abs(y - r.y));
+        o += ox * oy;
+      }
+      return o;
+    };
+    let best = null, bestO = Infinity;
+    for (let k = 0; k < 400 && bestO > 0; k++) {
+      const x = w / 2 + 20 + Math.random() * (W - w - 40), y = hh / 2 + 20 + Math.random() * (H - hh - 40);
+      const o = overlap(x, y); if (o < bestO) { bestO = o; best = [x, y]; }
+    }
+    b.style.left = best[0] + 'px'; b.style.top = best[1] + 'px';
+  };
+  const add = (text) => {
+    text = String(text).trim(); if (!text) return;
+    const b = h('div', { class: 'bubble', title: 'اضغطي مرّتين للحذف', ondblclick: () => { b.remove(); drawCount(); } }, text);
+    b.style.visibility = 'hidden'; cloud.append(b); place(b); b.style.visibility = '';
+    sfx.pop(); drawCount();
+  };
+  const input = h('input', { class: 'bs-input', type: 'text', placeholder: 'اكتبي إجابةَ الطالبةِ..',
+    onkeydown: e => { if (e.key === 'Enter') { add(input.value); input.value = ''; } } });
+  const timer = Timer(s.seconds);
+  drawCount();
+  return [head(s),
+    h('div', { class: 'bs' },
+      h('div', { class: 'bs-side' },
+        rich(s.question, 'div', 'bs-q card rv'),
+        h('div', { class: 'bs-add rv' }, input,
+          h('button', { type: 'button', class: 'btn', onclick: () => { add(input.value); input.value = ''; input.focus(); } }, '➕')),
+        h('div', { class: 'rv' }, count),
+        h('div', { class: 'rv' }, timer.el),
+        h('button', { type: 'button', class: 'btn soft rv', onclick: () => { for (let i = 0; i < 3 && sugg.length; i++) add(sugg.shift()); } }, '✨ أفكارٌ مقترحة')),
+      cloud)];
+};
+
+/* ⑪ فكّري – زاوجي – شاركي */
+R.tps = s => {
+  const timer = Timer(s.phases[0].seconds);
+  const phases = s.phases.map((p, i) => h('button', { type: 'button', class: 'phase card rv' + (i === 0 ? ' on' : ''), onclick: e => {
+    phases.forEach(x => x.classList.remove('on')); e.currentTarget.classList.add('on');
+    timer.set(p.seconds); timer.start(); sfx.pop();
+  } }, h('span', { class: 'ph-ico' }, p.icon), h('span', {}, h('div', { class: 'ph-name' }, p.name), h('div', { class: 'ph-desc' }, p.desc))));
+  const open = (cell, html) => { if (cell.classList.contains('open')) return; cell.classList.add('open'); cell.innerHTML = html; sfx.ding(); };
+  return [head(s),
+    h('div', { class: 'tps' },
+      h('div', { class: 'tps-side' }, phases, h('div', { class: 'rv' }, timer.el),
+        h('div', { class: 'btn-row rv' }, h('button', { type: 'button', class: 'btn soft',
+          onclick: e => e.currentTarget.closest('.tps').querySelectorAll('.td.ans').forEach((c, i) => {
+            const r = s.rows[Math.floor(i / 2)]; if (!c.classList.contains('open')) { c.classList.add('open'); c.innerHTML = i % 2 ? colorRoot(r.weight) : r.answer; }
+          }) }, '👁️ أظهري كلَّ الإجابات'))),
+      h('div', { class: 'tps-main' },
+        rich(s.task, 'div', 'tps-task card rv'),
+        h('div', { class: 'tbl rv' },
+          h('div', { class: 'th' }, 'الفعل'), h('div', { class: 'th' }, 'اسمُ الآلةِ'), h('div', { class: 'th' }, 'الوزن'),
+          s.rows.map(r => [
+            h('div', { class: 'td verb' }, r.verb),
+            h('div', { class: 'td ans', onclick: e => open(e.currentTarget, r.answer) }, '؟'),
+            h('div', { class: 'td ans', onclick: e => open(e.currentTarget, colorRoot(r.weight)) }, '؟'),
+          ]))))];
+};
+
+/* ⑫ ⑭ ⑰ ㉑ اختيار من متعدد */
+R.mcq = s => {
+  const fb = h('div', { class: 'feedback' });
+  const ex = s.explain ? rich(s.explain, 'div', 'explain') : null;
+  let solved = false;
+  const opts = s.options.map((o, i) => h('button', { type: 'button', class: 'opt rv', onclick: e => {
+    const b = e.currentTarget; if (solved || b.classList.contains('wrong')) return;
+    if (i === s.correct) {
+      solved = true; b.classList.add('correct'); $('.o-ico', b).textContent = '✅';
+      say(fb, true); celebrate(b); ex && ex.classList.add('show');
+    } else {
+      b.classList.add('wrong'); shakeEl(b); say(fb, false); sfx.wrong();
+    }
+  } }, h('span', { class: 'o-ico' }, o.icon), h('span', { html: s.weights ? colorRoot(o.text) : fmtRich(o.text) })));
+  return [head(s),
+    h('div', { class: 'body' },
+      rich(s.question, 'div', 'mcq-q card rv'),
+      h('div', { class: 'opts' }, opts),
+      fb, ex)];
+};
+
+/* ⑬ استخرجي اسم الآلة من الجملة */
+R.extract = s => {
+  const fb = h('div', { class: 'feedback', style: 'min-height:80px' });
+  let left = s.items.length;
+  const rows = s.items.map((it, n) => {
+    const ans = h('div', { class: 'ex-ans' }, '؟');
+    let done = false;
+    const sent = h('div', { class: 'ex-sent' });
+    it.text.split(' ').forEach((tok, k) => {
+      const m = tok.match(/^\[\[(.+?)\]\](.*)$/);
+      const word = m ? m[1] : tok, tail = m ? m[2] : '';
+      if (k) sent.append(' ');
+      sent.append(h('span', { class: 'w', onclick: e => {
+        const w = e.currentTarget; if (done) return;
+        if (m) {
+          done = true; w.classList.add('ok'); ans.classList.add('show');
+          ans.innerHTML = it.word + ' ← ' + (it.weight ? colorRoot(it.weight) : it.label);
+          left--; say(fb, true);
+          if (!left) celebrate(w, 90); else sfx.ding();
+        } else {
+          w.classList.add('no'); shakeEl(w); sfx.wrong(); say(fb, false);
+          setTimeout(() => w.classList.remove('no'), 900);
+        }
+      } }, word + tail));
+    });
+    return h('div', { class: 'ex-row card rv' }, h('span', { class: 'ex-n' }, ar(n + 1)), sent, ans);
+  });
+  return [head(s), s.intro ? rich(s.intro, 'p', 'intro rv') : null, h('div', { class: 'ex-list' }, rows), fb];
+};
+
+/* ⑮ صح أم خطأ */
+R.tf = s => {
+  const fb = h('div', { class: 'feedback', style: 'min-height:80px' });
+  return [head(s),
+    h('div', { class: 'tf-list' },
+      s.items.map(it => {
+        const row = h('div', { class: 'tf-row card rv' });
+        const pick = (val, btn) => {
+          if (row.classList.contains('solved')) return;
+          if (val === it.answer) { row.classList.add('solved'); btn.classList.add('picked'); say(fb, true); celebrate(btn, 50); }
+          else { shakeEl(row); sfx.wrong(); say(fb, false); }
+        };
+        row.append(
+          h('div', { class: 'tf-main' }, rich(it.text, 'div', 'tf-txt'), rich(it.explain, 'div', 'tf-exp')),
+          h('button', { type: 'button', class: 'tf-btn yes', onclick: e => pick(true, e.currentTarget) }, '✔ صح'),
+          h('button', { type: 'button', class: 'tf-btn no', onclick: e => pick(false, e.currentTarget) }, '✖ خطأ'));
+        return row;
+      })),
+    fb];
+};
+
+/* ⑯ كلمة بمعنيين — ماذا تتوقعين؟ */
+R.twoMeanings = s => {
+  const concl = h('div', { class: 'tm-concl' });
+  let left = s.cards.length;
+  return [head(s),
+    h('div', { class: 'tm-top rv' },
+      h('div', { class: 'tm-word' }, s.word, s.weightNote ? h('small', { html: s.weightNote.replace(/:\s*(.+)$/, (m, w) => ': ' + colorRoot(w)) }) : null),
+      rich(s.prompt, 'p', 'tm-prompt')),
+    h('div', { class: 'tm-cards' },
+      s.cards.map(c => {
+        const res = h('div', { class: 'tm-res' }); let done = false;
+        const card = h('div', { class: 'tm-card card rv' },
+          rich(c.sentence, 'div', 'tm-sent'),
+          h('div', { class: 'tm-opts' }, s.choices.map(ch => h('button', { type: 'button', class: 'opt', onclick: e => {
+            const b = e.currentTarget; if (done || b.classList.contains('wrong')) return;
+            if (ch.key === c.correct) {
+              done = true; b.classList.add('correct'); res.replaceChildren(rich('✅ ' + c.why, 'span', 'pop'));
+              celebrate(b, 50); if (!--left) setTimeout(() => concl.replaceChildren(rich(s.conclusion, 'span', 'msg ok pop')), 700);
+            } else { b.classList.add('wrong'); shakeEl(b); sfx.wrong(); res.replaceChildren(h('span', { class: 'pop', style: 'color:var(--bad)' }, LESSON.wrongMsg)); }
+          } }, ch.label))),
+          res);
+        return card;
+      })),
+    concl];
+};
+
+/* ⑱ تحدّي الدقيقة */
+R.challenge = s => {
+  const box = h('div', { class: 'ch card rv' });
+  let id = null;
+  const intro = () => box.replaceChildren(
+    h('div', { class: 'ch-ico' }, '⏱️'),
+    rich(s.description, 'p', 'ch-desc'),
+    h('button', { type: 'button', class: 'btn big', onclick: start }, '🚀 ابدئي التحدّي'));
+  function start() {
+    clearInterval(id);
+    const words = shuffle([...s.words]);
+    let idx = 0, score = 0, left = s.seconds, locked = false;
+    const sc = h('span', { class: 'stat' }), tm = h('span', { class: 'stat' }), pr = h('span', { class: 'stat' });
+    const word = h('div', { class: 'ch-word' });
+    const draw = () => {
+      sc.textContent = '⭐ ' + ar(score); tm.textContent = '⏱ ' + fmtTime(left);
+      pr.textContent = '📝 ' + ar(Math.min(idx + 1, words.length)) + ' / ' + ar(words.length);
+      tm.classList.toggle('low', left <= 10);
+    };
+    const show = () => { word.className = 'ch-word'; word.textContent = words[idx].w; void word.offsetWidth; word.classList.add('pop'); draw(); };
+    const finish = () => {
+      clearInterval(id); id = null;
+      const ratio = score / words.length;
+      box.replaceChildren(
+        h('div', { class: 'ch-ico' }, ratio >= .8 ? '🏆' : ratio >= .5 ? '🎉' : '💪'),
+        h('div', { class: 'ch-result', html: `نتيجتُكُنّ: <b>${ar(score)}</b> من ${ar(words.length)}` }),
+        h('p', { class: 'ch-desc' }, ratio >= .8 ? 'مُذهل! أنتنّ بطلاتُ اسمِ الآلةِ 🌟' : ratio >= .5 ? 'رائع! أداءٌ جميلٌ 💜' : 'محاولةٌ جميلة.. هيّا نحاولُ مرّةً أخرى 💪'),
+        h('button', { type: 'button', class: 'btn', onclick: start }, '🔁 إعادة التحدّي'));
+      if (ratio >= .5) celebrate(box, 120); else sfx.pop();
+    };
+    const answer = (k, btn) => {
+      if (locked) return; locked = true;
+      const ok = words[idx].c === k;
+      if (ok) { score++; sfx.ding(); const [x, y] = center(btn); confetti(x, y, 25); }
+      else { sfx.wrong(); word.append(h('small', {}, '← ' + s.categories[words[idx].c].label)); }
+      word.classList.add(ok ? 'ok' : 'bad'); draw();
+      setTimeout(() => { idx++; locked = false; if (idx >= words.length) finish(); else show(); }, ok ? 550 : 1300);
+    };
+    box.replaceChildren(
+      h('div', { class: 'ch-top' }, sc, tm, pr), word,
+      h('div', { class: 'ch-cats' }, s.categories.map((c, k) => h('button', { type: 'button', class: 'cat cat-' + k, onclick: e => answer(k, e.currentTarget) }, c.icon + ' ' + c.label))));
+    id = setInterval(() => {
+      if (!box.isConnected) { clearInterval(id); return; }
+      left--; if (left <= 0) { left = 0; draw(); sfx.bell(); finish(); } else { if (left <= 5) sfx.tick(); draw(); }
+    }, 1000);
+    show();
+  }
+  intro();
+  return [head(s), box];
+};
+
+/* ⑲ التعلم التعاوني + نقاط المجموعات */
+R.groups = s => {
+  const timer = Timer(s.seconds);
+  return [head(s),
+    h('div', { class: 'gr' },
+      h('div', { class: 'gr-task card rv' },
+        rich(s.task, 'h3', 'gr-title'),
+        h('ol', { class: 'gr-steps' }, s.steps.map((t, i) => h('li', {}, h('span', { class: 'n' }, ar(i + 1)), rich(t, 'span', 'li-t')))),
+        h('div', { class: 'roles' }, s.roles.map(r => h('span', { class: 'role' }, r)))),
+      h('div', { class: 'gr-side' },
+        h('div', { class: 'rv' }, timer.el),
+        s.groups.map(g => {
+          let pts = 0;
+          const sc = h('span', { class: 'g-score' }, '⭐ ٠');
+          const set = d => { pts = Math.max(0, pts + d); sc.textContent = '⭐ ' + ar(pts); sc.classList.remove('pop'); void sc.offsetWidth; sc.classList.add('pop'); };
+          return h('div', { class: 'g-row card rv' }, h('span', { class: 'g-name' }, g), sc,
+            h('button', { type: 'button', class: 'icon-btn', title: 'إضافة نجمة', onclick: e => { set(1); sfx.ding(); const [x, y] = center(e.currentTarget); confetti(x, y, 20); } }, '+'),
+            h('button', { type: 'button', class: 'icon-btn', title: 'إنقاص', onclick: () => set(-1) }, '−'));
+        })))];
+};
+
+/* ㉒ تقييم ذاتي + الواجب */
+R.exit = s => [head(s),
+  h('div', { class: 'exit' },
+    h('div', { class: 'self card rv' },
+      rich(s.question, 'p', 'self-q'),
+      h('div', { class: 'emos' }, s.options.map(o => {
+        let n = 0; const c = h('span', { class: 'c' }, ar(0));
+        return h('button', { type: 'button', class: 'emo', onclick: () => { c.textContent = ar(++n); c.classList.remove('pop'); void c.offsetWidth; c.classList.add('pop'); sfx.pop(); } },
+          h('span', { class: 'e' }, o.e), h('span', { class: 'l' }, o.l), c);
+      }))),
+    h('div', { class: 'hw card rv' },
+      rich(s.homeworkTitle, 'h3'),
+      h('ol', {}, s.homework.map((t, i) => h('li', {}, h('span', { class: 'n' }, ar(i + 1)), rich(t, 'span', 'li-t')))))),
+];
+
+/* ㉓ الختام */
+R.closing = s => [
+  h('div', { class: 'closing' },
+    h('div', { class: 'cl-emoji rv' }, s.emoji),
+    rich(s.title, 'h1', 'cl-title rv'),
+    rich(s.message, 'p', 'cl-msg rv'),
+    h('div', { class: 'cl-quote rv' }, s.quote),
+    s.clapBtn ? h('button', { type: 'button', class: 'btn yellow big rv', onclick: () => { clap(); confetti(innerWidth / 2, innerHeight / 3, 140); } }, s.clapBtn) : null),
+];
+
+
+/* =====================================================================
+   بناء الشرائح والتنقل
+   ===================================================================== */
+const slidesBox = $('#slides');
+const slideEls = SLIDES.map((s, i) => { const el = h('section', { class: 'slide', 'data-i': i }); slidesBox.append(el); return el; });
+let cur = 0;
+
+function buildSlide(i) {
+  const s = SLIDES[i], el = slideEls[i], render = R[s.type];
+  el.replaceChildren(...[].concat(render ? render(s) : h('p', {}, 'نوع شريحة غير معروف: ' + s.type)).flat().filter(Boolean));
+  el.querySelectorAll('.rv').forEach((e, k) => e.style.setProperty('--i', k));
+  if (el.classList.contains('active')) { el.classList.remove('active'); void el.offsetWidth; el.classList.add('active'); }
+}
+
+function show(i, dir = 1) {
+  const to = slideEls[i], from = slideEls[cur];
+  if (from !== to) {
+    from.classList.remove('active');
+    from.classList.add('leaving');
+    setTimeout(() => from.classList.remove('leaving'), 400);
+  }
+  to.classList.remove('leaving', 'a-fade', 'a-slide', 'a-zoom', 'd-next', 'd-prev', 'active');
+  void to.offsetWidth;                                              // إعادة تشغيل الحركة
+  to.classList.add('active', 'a-' + (SLIDES[i].anim || 'fade'), dir > 0 ? 'd-next' : 'd-prev');
+  cur = i;
+  const N = SLIDES.length;
+  $('#counter').textContent = `${ar(i + 1)} / ${ar(N)}`;
+  $('#cNum').textContent = `${ar(i + 1)} / ${ar(N)}`;
+  $('#progress i').style.width = ((i + 1) / N * 100) + '%';
+  history.replaceState(null, '', '#' + (i + 1));
+}
+const go = i => { if (i >= 0 && i < SLIDES.length && i !== cur) show(i, i > cur ? 1 : -1); };
+const next = () => go(cur + 1);
+const prev = () => go(cur - 1);
+
+
+/* =====================================================================
+   لوحة المفاتيح والفأرة واللمس
+   ===================================================================== */
+window.addEventListener('keydown', e => {
+  const t = e.target;
+  if (t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA' || t.isContentEditable)) {
+    if (e.key === 'Escape') t.blur();
+    return;                                                         // الكتابة داخل الحقل لا تحرّك العرض
+  }
+  if (e.ctrlKey || e.metaKey || e.altKey) return;
+  sfx.unlock();
+  if (e.key === 'ArrowRight' || e.key === 'PageDown' || e.code === 'Space' || e.key === ' ') {
+    e.preventDefault(); if (!e.repeat) next();
+  } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+    e.preventDefault(); if (!e.repeat) prev();
+  } else if (e.key === 'ArrowUp' || e.key === 'ArrowDown') {
+    e.preventDefault();
+  } else if (e.key === 'Home') { e.preventDefault(); go(0); }
+  else if (e.key === 'End') { e.preventDefault(); go(SLIDES.length - 1); }
+  else if (e.key === 'ت' || e.code === 'KeyF') {                     // حرف (ت) = نفس زر F
+    e.preventDefault(); if (!e.repeat) clap();
+  }
+}, { capture: true });
+
+// إزالة التركيز عن الأزرار بعد الضغط حتى لا يضغطها Space مرة أخرى
+document.addEventListener('click', e => { const b = e.target.closest('button'); if (b) b.blur(); sfx.unlock(); });
+
+$('#cPrev').onclick = prev;
+$('#cNext').onclick = next;
+$('#cClap').onclick = clap;
+$('#cFull').onclick = () => {
+  const d = document, el = d.documentElement;
+  if (!(d.fullscreenElement || d.webkitFullscreenElement)) {
+    if (el.requestFullscreen) el.requestFullscreen().catch(() => {});
+    else el.webkitRequestFullscreen?.();                          // آيباد (سفاري القديم)
+  } else (d.exitFullscreen || d.webkitExitFullscreen)?.call(d);
+};
+
+// السحب باللمس (للسبورة الذكية)
+let tx = null, ty = null;
+addEventListener('touchstart', e => { if (e.touches.length === 1) { tx = e.touches[0].clientX; ty = e.touches[0].clientY; } }, { passive: true });
+addEventListener('touchend', e => {
+  if (tx == null) return;
+  const dx = e.changedTouches[0].clientX - tx, dy = e.changedTouches[0].clientY - ty; tx = null;
+  if (Math.abs(dx) > 110 && Math.abs(dy) < 70) (dx < 0 ? next() : prev());
+}, { passive: true });
+
+// منع أي تمرير
+addEventListener('wheel', e => e.preventDefault(), { passive: false });
+addEventListener('touchmove', e => { if (!e.target.closest('input')) e.preventDefault(); }, { passive: false });
+
+// إخفاء شريط التحكم تلقائيًا عند عدم تحريك الماوس
+let idleT;
+const wake = () => {
+  document.body.classList.remove('idle'); clearTimeout(idleT);
+  idleT = setTimeout(() => { if ($('#controls').matches(':hover')) wake(); else document.body.classList.add('idle'); }, 2800);
+};
+['mousemove', 'mousedown', 'touchstart', 'keydown'].forEach(ev => addEventListener(ev, wake, { passive: true }));
+
+
+/* =====================================================================
+   تحجيم المسرح ليملأ الشاشة بنسبة 16:9 + رسم الإطار المموّج
+   ===================================================================== */
+const stage = $('#stage');
+function fit() {
+  scale = Math.min(innerWidth / 1920, innerHeight / 1080);
+  stage.style.transform = `translate(-50%,-50%) scale(${scale})`;
+}
+addEventListener('resize', fit);
+
+function wavyRect(x0, y0, x1, y1, amp, wl) {
+  const pts = [];
+  const edge = (xa, ya, xb, yb, nx, ny) => {
+    const len = Math.hypot(xb - xa, yb - ya), n = Math.round(len / 6), waves = Math.round(len / wl);
+    for (let i = 0; i < n; i++) {
+      const t = i / n, off = amp * (1 - Math.cos(t * waves * 2 * Math.PI)) / 2;
+      pts.push([(xa + (xb - xa) * t + nx * off).toFixed(1), (ya + (yb - ya) * t + ny * off).toFixed(1)]);
+    }
+  };
+  edge(x0, y0, x1, y0, 0, 1); edge(x1, y0, x1, y1, -1, 0); edge(x1, y1, x0, y1, 0, -1); edge(x0, y1, x0, y0, 1, 0);
+  return 'M' + pts.map(p => p.join(' ')).join('L') + 'Z';
+}
+$('#wavePath').setAttribute('d', wavyRect(26, 24, 1894, 1056, 16, 150));
+
+
+/* =====================================================================
+   التشغيل
+   ===================================================================== */
+fit();
+SLIDES.forEach((_, i) => buildSlide(i));
+const start = Math.min(Math.max((parseInt(location.hash.slice(1), 10) || 1) - 1, 0), SLIDES.length - 1);
+cur = start;
+show(start, 1);
+wake();
+</script>
+</body>
+</html>
